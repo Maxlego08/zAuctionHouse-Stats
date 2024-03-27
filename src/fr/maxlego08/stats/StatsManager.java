@@ -130,7 +130,7 @@ public class StatsManager extends ZUtils implements Listener {
             return Config.whoSpentMostMoneyEmptyMoney;
         });
         placeholder.register("who_spent_most_money_amount_", (player, economyName) -> {
-            Optional<Map.Entry<UUID, Long>> optional = findTopEarner(economyName);
+            Optional<Map.Entry<UUID, Long>> optional = findTopSpender(economyName);
             if (optional.isPresent()) {
                 Map.Entry<UUID, Long> entry = optional.get();
                 return String.valueOf(entry.getValue());

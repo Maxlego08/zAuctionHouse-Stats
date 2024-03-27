@@ -1,0 +1,10 @@
+name: zAuctionHouseStats
+author: Maxlego08
+main: fr.maxlego08.stats.StatsPlugin
+website: https://groupez.dev
+description: Statistic for zAuctionHouse
+version: ${project.version}
+api-version: 1.13
+depend:
+  - zAuctionHouseV3
+commands:

@@ -11,6 +11,22 @@
     </properties>
     <build>
         <sourceDirectory>src</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources/</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -103,6 +119,13 @@
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
             <version>9.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Maxlego08</groupId>
+            <artifactId>zAuctionHouseV3-API</artifactId>
+            <version>3.2.1.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.1.2.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

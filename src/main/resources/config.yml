@@ -1,7 +1,25 @@
 #########################################################################################################################################
 #
 #
+# ░██████╗████████╗░█████╗░████████╗██╗░██████╗████████╗██╗░█████╗░░██████╗
+# ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝
+# ╚█████╗░░░░██║░░░███████║░░░██║░░░██║╚█████╗░░░░██║░░░██║██║░░╚═╝╚█████╗░
+# ░╚═══██╗░░░██║░░░██╔══██║░░░██║░░░██║░╚═══██╗░░░██║░░░██║██║░░██╗░╚═══██╗
+# ██████╔╝░░░██║░░░██║░░██║░░░██║░░░██║██████╔╝░░░██║░░░██║╚█████╔╝██████╔╝
+#  ╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░╚═╝╚═════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═════╝░
 #
+# Commands:
+#
+# Placeholders:
+# %zahstats_item_sold_amount% - The number of items listed for sale.
+# %zahstats_item_purchase_amount% - The number of items purchased.
+# %zahstats_number_of_items_not_sold% - The number of unsold items that will expire.
+# %zahstats_number_of_items_expired% - The number of items that have expired.
+# %zahstats_number_of_items_remove_from_expire% - The number of items removed from the EXPIRE storage type.
+# %zahstats_number_of_items_remove_from_storage% - The number of items removed from the ITEMS storage type.
+# %zahstats_number_of_items_remove_from_bought% - The number of items removed from the BUY storage type.
+# %zahstats_number_of_items_destroy% - The number of items that have been destroyed.
+# %zahstats_auction_opened% - The number of times the auction house was opened.
 #
 #########################################################################################################################################
 
@@ -10,3 +28,10 @@ enableDebug: false
 
 # Enables time debugs, is used to measure plugin performance
 enableDebugTime: false
+
+sql:
+  host: 192.168.10.10
+  port: 3306
+  user: homestead
+  password: 'secret'
+  database: zauctionhouse

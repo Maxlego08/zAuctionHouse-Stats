@@ -1,4 +1,4 @@
-package fr.maxlego08.stats.api;
+package fr.maxlego08.stats.api.global;
 
 public class GlobalValue {
     private Object value;
@@ -32,22 +32,37 @@ public class GlobalValue {
     }
 
     public double asDouble() {
+        if (value instanceof Double) return (double) value;
         if (value instanceof Number) {
             return ((Number) value).doubleValue();
+        }
+        try {
+            return Double.parseDouble(this.asString());
+        } catch (Exception ignored) {
         }
         throw new IllegalArgumentException("Value cannot be converted to double");
     }
 
     public int asInt() {
+        if (value instanceof Integer) return (int) value;
         if (value instanceof Number) {
             return ((Number) value).intValue();
+        }
+        try {
+            return Integer.parseInt(this.asString());
+        } catch (Exception ignored) {
         }
         throw new IllegalArgumentException("Value cannot be converted to int");
     }
 
     public long asLong() {
+        if (value instanceof Long) return (long) value;
         if (value instanceof Number) {
             return ((Number) value).longValue();
+        }
+        try {
+            return Long.parseLong(this.asString());
+        } catch (Exception ignored) {
         }
         throw new IllegalArgumentException("Value cannot be converted to long");
     }

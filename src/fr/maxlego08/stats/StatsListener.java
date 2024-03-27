@@ -1,6 +1,7 @@
 package fr.maxlego08.stats;
 
-import fr.maxlego08.stats.api.GlobalKey;
+import fr.maxlego08.stats.api.economy.EconomyKey;
+import fr.maxlego08.stats.api.global.GlobalKey;
 import fr.maxlego08.stats.zcore.utils.ZUtils;
 import fr.maxlego08.zauctionhouse.api.enums.StorageType;
 import fr.maxlego08.zauctionhouse.api.event.events.AuctionAdminRemoveEvent;
@@ -28,6 +29,7 @@ public class StatsListener extends ZUtils implements Listener {
         if (event.isCancelled()) return;
 
         this.manager.addOne(GlobalKey.ITEM_SOLD_AMOUNT);
+        this.manager.updateEconomy(EconomyKey.TOTAL_PRICE_OF_ALL_ITEMS_SOLD, event.getEconomy(), event.getPrice());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -35,6 +37,7 @@ public class StatsListener extends ZUtils implements Listener {
         if (event.isCancelled()) return;
 
         this.manager.addOne(GlobalKey.ITEM_PURCHASE_AMOUNT);
+        this.manager.updateEconomy(EconomyKey.MONEY_SPEND, event.getAuctionItem().getEconomy(), event.getTransaction().getPrice());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

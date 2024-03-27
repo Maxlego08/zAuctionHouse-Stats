@@ -1,7 +1,7 @@
 package fr.maxlego08.stats.storage;
 
-import fr.maxlego08.stats.api.GlobalKey;
-import fr.maxlego08.stats.api.GlobalValue;
+import fr.maxlego08.stats.api.global.GlobalKey;
+import fr.maxlego08.stats.api.global.GlobalValue;
 import fr.maxlego08.stats.api.Table;
 import fr.maxlego08.stats.zcore.ZPlugin;
 

@@ -4,6 +4,7 @@ import fr.maxlego08.stats.command.commands.CommandStats;
 import fr.maxlego08.stats.placeholder.LocalPlaceholder;
 import fr.maxlego08.stats.save.Config;
 import fr.maxlego08.stats.save.MessageLoader;
+import fr.maxlego08.stats.storage.GlobalEconomyStatsTable;
 import fr.maxlego08.stats.storage.GlobalStatsTable;
 import fr.maxlego08.stats.storage.SqlConnection;
 import fr.maxlego08.stats.zcore.ZPlugin;
@@ -22,6 +23,7 @@ public class StatsPlugin extends ZPlugin {
     private final StatsManager manager = new StatsManager(this);
     private SqlConnection connection;
     private GlobalStatsTable globalStatsTable;
+    private GlobalEconomyStatsTable globalEconomyStatsTable;
 
     @Override
     public void onEnable() {
@@ -51,14 +53,17 @@ public class StatsPlugin extends ZPlugin {
             }
 
             this.globalStatsTable = new GlobalStatsTable(this.connection);
+            this.globalEconomyStatsTable = new GlobalEconomyStatsTable(this.connection);
             try {
                 this.globalStatsTable.create();
+                this.globalEconomyStatsTable.create();
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
 
             try {
                 this.manager.setGlobalValues(this.globalStatsTable.selectAll());
+                this.manager.setEconomyValues(this.globalEconomyStatsTable.selectAll());
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -90,5 +95,9 @@ public class StatsPlugin extends ZPlugin {
 
     public GlobalStatsTable getGlobalStatsTable() {
         return globalStatsTable;
+    }
+
+    public GlobalEconomyStatsTable getGlobalEconomyStatsTable() {
+        return globalEconomyStatsTable;
     }
 }

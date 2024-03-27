@@ -21,6 +21,10 @@
 # %zahstats_number_of_items_destroy% - The number of items that have been destroyed.
 # %zahstats_auction_opened% - The number of times the auction house was opened.
 #
+# %zahstats_money_spend_<economy name>% - Total money spent in the auction house.
+# %zahstats_total_price_of_all_items_sold_<economy name>% - Cumulative price of all items that were listed for sale.
+#
+#
 #########################################################################################################################################
 
 # Displays more information in the console, if you have a problem please enable this option and send errors to support.

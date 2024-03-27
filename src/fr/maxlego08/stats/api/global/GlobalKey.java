@@ -1,4 +1,4 @@
-package fr.maxlego08.stats.api;
+package fr.maxlego08.stats.api.global;
 
 public enum GlobalKey {
     ITEM_SOLD_AMOUNT(Integer.class), // Le nombre d'items mis en vente

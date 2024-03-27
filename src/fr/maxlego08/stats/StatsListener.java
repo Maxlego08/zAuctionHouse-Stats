@@ -30,6 +30,7 @@ public class StatsListener extends ZUtils implements Listener {
 
         this.manager.addOne(GlobalKey.ITEM_SOLD_AMOUNT);
         this.manager.updateEconomy(EconomyKey.TOTAL_PRICE_OF_ALL_ITEMS_SOLD, event.getEconomy(), event.getPrice());
+        this.manager.storeSellItem(event.getPlayer(), event.getAuctionItem());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -38,6 +39,7 @@ public class StatsListener extends ZUtils implements Listener {
 
         this.manager.addOne(GlobalKey.ITEM_PURCHASE_AMOUNT);
         this.manager.updateEconomy(EconomyKey.MONEY_SPEND, event.getAuctionItem().getEconomy(), event.getTransaction().getPrice());
+        this.manager.storePurchaseItem(event.getPlayer(), event.getAuctionItem());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

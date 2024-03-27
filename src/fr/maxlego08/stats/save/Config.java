@@ -9,7 +9,9 @@ public class Config {
 
 	public static boolean enableDebug = true;
 	public static boolean enableDebugTime = false;
-	
+	public static String whoSpentMostMoneyEmptyName = "✘";
+	public static String whoSpentMostMoneyEmptyMoney = "0";
+
 	/**
 	 * static Singleton instance.
 	 */
@@ -42,6 +44,8 @@ public class Config {
 		FileConfiguration configuration = plugin.getConfig();
 		enableDebug = configuration.getBoolean("enableDebug", false);
 		enableDebugTime = configuration.getBoolean("enableDebugTime", false);
+		whoSpentMostMoneyEmptyName = configuration.getString("whoSpentMostMoneyEmptyName", "X");
+		whoSpentMostMoneyEmptyMoney = configuration.getString("whoSpentMostMoneyEmptyMoney", "0");
 	}
 
 }

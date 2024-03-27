@@ -10,7 +10,7 @@
 #
 # Commands:
 #
-# Placeholders:
+# Global Placeholders:
 # %zahstats_item_sold_amount% - The number of items listed for sale.
 # %zahstats_item_purchase_amount% - The number of items purchased.
 # %zahstats_number_of_items_not_sold% - The number of unsold items that will expire.
@@ -21,9 +21,19 @@
 # %zahstats_number_of_items_destroy% - The number of items that have been destroyed.
 # %zahstats_auction_opened% - The number of times the auction house was opened.
 #
+# Global Economy Placeholders:
 # %zahstats_money_spend_<economy name>% - Total money spent in the auction house.
 # %zahstats_total_price_of_all_items_sold_<economy name>% - Cumulative price of all items that were listed for sale.
 #
+# Player Placeholders:
+# %zahstats_player_total_sales% - Total items on sale
+# %zahstats_player_total_purchases% - Total items purchased
+# %zahstats_player_total_earned_<economy name>% - Total money earned
+# %zahstats_player_total_spent_<economy name>% - Total money spent
+#
+# Ranking Placeholders:
+# %zahstats_who_spent_most_money_name_<economy>% - Who spent the most - Name
+# %zahstats_who_spent_most_money_amount_<economy>% - Who spent the most - Amount
 #
 #########################################################################################################################################
 
@@ -39,3 +49,6 @@ sql:
   user: homestead
   password: 'secret'
   database: zauctionhouse
+
+whoSpentMostMoneyEmptyName: "✘"
+whoSpentMostMoneyEmptyMoney: "0"

@@ -8,10 +8,10 @@ import fr.maxlego08.stats.storage.GlobalEconomyStatsTable;
 import fr.maxlego08.stats.storage.GlobalStatsTable;
 import fr.maxlego08.stats.storage.PlayerItemPurchasedTable;
 import fr.maxlego08.stats.storage.PlayerItemSaleTable;
+import fr.maxlego08.stats.storage.PlayerStatsTable;
 import fr.maxlego08.stats.storage.SqlConnection;
 import fr.maxlego08.stats.zcore.ZPlugin;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 
@@ -29,6 +29,7 @@ public class StatsPlugin extends ZPlugin {
     private GlobalEconomyStatsTable globalEconomyStatsTable;
     private PlayerItemSaleTable playerItemSaleTable;
     private PlayerItemPurchasedTable playerItemPurchasedTable;
+    private PlayerStatsTable playerStatsTable;
 
     @Override
     public void onEnable() {
@@ -61,11 +62,13 @@ public class StatsPlugin extends ZPlugin {
             this.globalEconomyStatsTable = new GlobalEconomyStatsTable(this.connection);
             this.playerItemSaleTable = new PlayerItemSaleTable(this.connection);
             this.playerItemPurchasedTable = new PlayerItemPurchasedTable(this.connection);
+            this.playerStatsTable = new PlayerStatsTable(this.connection);
             try {
                 this.globalStatsTable.create();
                 this.globalEconomyStatsTable.create();
                 this.playerItemSaleTable.create();
                 this.playerItemPurchasedTable.create();
+                this.playerStatsTable.create();
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -75,12 +78,15 @@ public class StatsPlugin extends ZPlugin {
                 this.manager.setEconomyValues(this.globalEconomyStatsTable.selectAll());
                 this.manager.setPlayerSaleItems(this.playerItemSaleTable.selectAll());
                 this.manager.setPlayerPurchaseItems(this.playerItemPurchasedTable.selectAll());
+                this.manager.setPlayerStats(this.playerStatsTable.selectAll());
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
         });
 
         this.manager.registerGlobalPlaceholders();
+        this.manager.registerPlayerPlaceholders();
+        this.manager.registerRankingPlaceholders();
 
         this.postEnable();
     }
@@ -118,5 +124,9 @@ public class StatsPlugin extends ZPlugin {
 
     public PlayerItemSaleTable getPlayerItemSaleTable() {
         return playerItemSaleTable;
+    }
+
+    public PlayerStatsTable getPlayerStatsTable() {
+        return playerStatsTable;
     }
 }

@@ -15,9 +15,10 @@ public class PlayerItemPurchased {
     private final UUID sellerId;
     private final String sellerName;
     private final long purchaseTime;
+    private final AuctionType auctionType;
     private long id;
 
-    public PlayerItemPurchased(UUID playerId, String playerName, String itemStack, long price, String economy, UUID sellerId, String sellerName, long purchaseTime) {
+    public PlayerItemPurchased(UUID playerId, String playerName, String itemStack, long price, String economy, UUID sellerId, String sellerName, long purchaseTime, AuctionType auctionType) {
         this.playerId = playerId;
         this.playerName = playerName;
         this.itemStack = itemStack;
@@ -26,6 +27,7 @@ public class PlayerItemPurchased {
         this.sellerId = sellerId;
         this.sellerName = sellerName;
         this.purchaseTime = purchaseTime;
+        this.auctionType = auctionType;
     }
 
     public PlayerItemPurchased(AuctionItem auctionItem, Player player) {
@@ -37,6 +39,7 @@ public class PlayerItemPurchased {
         this.purchaseTime = System.currentTimeMillis();
         this.sellerId = auctionItem.getSellerUniqueId();
         this.sellerName = auctionItem.getSellerName();
+        this.auctionType = auctionItem.getType();
     }
 
     public long getId() {
@@ -77,5 +80,9 @@ public class PlayerItemPurchased {
 
     public long getPurchaseTime() {
         return purchaseTime;
+    }
+
+    public AuctionType getAuctionType() {
+        return auctionType;
     }
 }

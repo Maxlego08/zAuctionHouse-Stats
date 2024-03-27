@@ -1,5 +1,6 @@
 package fr.maxlego08.stats;
 
+import fr.maxlego08.stats.api.PlayerStats;
 import fr.maxlego08.stats.api.economy.EconomyKey;
 import fr.maxlego08.stats.api.global.GlobalKey;
 import fr.maxlego08.stats.zcore.utils.ZUtils;
@@ -31,6 +32,10 @@ public class StatsListener extends ZUtils implements Listener {
         this.manager.addOne(GlobalKey.ITEM_SOLD_AMOUNT);
         this.manager.updateEconomy(EconomyKey.TOTAL_PRICE_OF_ALL_ITEMS_SOLD, event.getEconomy(), event.getPrice());
         this.manager.storeSellItem(event.getPlayer(), event.getAuctionItem());
+
+        PlayerStats playerStats = this.manager.getPlayerStats(event.getPlayer());
+        playerStats.soldItem();
+        this.manager.updatePlayerStats(playerStats);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -40,6 +45,10 @@ public class StatsListener extends ZUtils implements Listener {
         this.manager.addOne(GlobalKey.ITEM_PURCHASE_AMOUNT);
         this.manager.updateEconomy(EconomyKey.MONEY_SPEND, event.getAuctionItem().getEconomy(), event.getTransaction().getPrice());
         this.manager.storePurchaseItem(event.getPlayer(), event.getAuctionItem());
+
+        PlayerStats playerStats = this.manager.getPlayerStats(event.getPlayer());
+        playerStats.purchaseItem();
+        this.manager.updatePlayerStats(playerStats);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

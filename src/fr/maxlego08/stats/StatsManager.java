@@ -33,12 +33,12 @@ public class StatsManager extends ZUtils implements Listener {
 
     private final StatsPlugin plugin;
     private final AuctionManager auctionManager;
+    private final ItemPriceStatistics itemPriceStatistics;
     private EnumMap<GlobalKey, GlobalValue> globalValues;
     private Map<Pair<EconomyKey, String>, Long> economyValues = new HashMap<>();
     private Map<UUID, List<PlayerItemForSale>> playerSaleItems = new HashMap<>();
     private Map<UUID, List<PlayerItemPurchased>> playerPurchaseItems = new HashMap<>();
     private Map<UUID, PlayerStats> playerStats = new HashMap<>();
-    private final ItemPriceStatistics itemPriceStatistics;
 
     public StatsManager(StatsPlugin plugin) {
         this.plugin = plugin;
@@ -57,10 +57,6 @@ public class StatsManager extends ZUtils implements Listener {
 
     public void setPlayerSaleItems(Map<UUID, List<PlayerItemForSale>> playerSaleItems) {
         this.playerSaleItems = playerSaleItems;
-    }
-
-    public void setPlayerPurchaseItems(Map<UUID, List<PlayerItemPurchased>> playerPurchaseItems) {
-        this.playerPurchaseItems = playerPurchaseItems;
     }
 
     public void setPlayerStats(Map<UUID, PlayerStats> playerStats) {
@@ -215,7 +211,6 @@ public class StatsManager extends ZUtils implements Listener {
         return this.playerPurchaseItems.values().stream().flatMap(List::stream).filter(purchase -> purchase.getEconomy().equals(economyName)).collect(Collectors.groupingBy(PlayerItemPurchased::getPlayerId, Collectors.summingLong(PlayerItemPurchased::getPrice))).entrySet().stream().max(Map.Entry.comparingByValue());
     }
 
-
     public Optional<Map.Entry<UUID, Long>> findTopEarner(String economyName) {
         return this.playerSaleItems.values().stream().flatMap(List::stream).filter(sale -> sale.getEconomy().equals(economyName)).collect(Collectors.groupingBy(PlayerItemForSale::getPlayerId, Collectors.summingLong(PlayerItemForSale::getPrice))).entrySet().stream().max(Map.Entry.comparingByValue());
     }
@@ -246,6 +241,10 @@ public class StatsManager extends ZUtils implements Listener {
 
     public Stream<PlayerItemPurchased> getPlayerPurchaseItems() {
         return playerPurchaseItems.values().stream().flatMap(List::stream);
+    }
+
+    public void setPlayerPurchaseItems(Map<UUID, List<PlayerItemPurchased>> playerPurchaseItems) {
+        this.playerPurchaseItems = playerPurchaseItems;
     }
 
     public ItemPriceStatistics getItemPriceStatistics() {

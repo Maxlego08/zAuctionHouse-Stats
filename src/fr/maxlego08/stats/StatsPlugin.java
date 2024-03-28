@@ -12,6 +12,7 @@ import fr.maxlego08.stats.storage.PlayerItemSaleTable;
 import fr.maxlego08.stats.storage.PlayerStatsTable;
 import fr.maxlego08.stats.storage.SqlConnection;
 import fr.maxlego08.stats.zcore.ZPlugin;
+import fr.maxlego08.stats.zmenu.ZMenuManager;
 import fr.maxlego08.zauctionhouse.ZAuctionPlugin;
 import fr.maxlego08.zauctionhouse.command.commands.CommandAuction;
 import org.bukkit.Bukkit;
@@ -33,12 +34,15 @@ public class StatsPlugin extends ZPlugin {
     private PlayerItemSaleTable playerItemSaleTable;
     private PlayerItemPurchasedTable playerItemPurchasedTable;
     private PlayerStatsTable playerStatsTable;
+    private ZMenuManager menuManager;
 
     @Override
     public void onEnable() {
 
         LocalPlaceholder placeholder = LocalPlaceholder.getInstance();
         placeholder.setPrefix("zahstats");
+
+        this.files.add("stats");
 
         this.preEnable();
 
@@ -97,6 +101,12 @@ public class StatsPlugin extends ZPlugin {
         CommandAuction commandAuction = auctionPlugin.getCommandAuction();
         commandAuction.addSubCommand(new CommandAuctionPrice(auctionPlugin, this));
 
+        if (fr.maxlego08.zauctionhouse.api.utils.Config.USE_ZMENU_INVENTORY) {
+            this.menuManager = new ZMenuManager(this);
+            this.menuManager.loadButtons();
+            this.menuManager.loadInventories();
+        }
+
         this.postEnable();
     }
 
@@ -137,5 +147,9 @@ public class StatsPlugin extends ZPlugin {
 
     public PlayerStatsTable getPlayerStatsTable() {
         return playerStatsTable;
+    }
+
+    public ZMenuManager getMenuManager() {
+        return menuManager;
     }
 }

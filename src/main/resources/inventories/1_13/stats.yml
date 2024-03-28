@@ -1,0 +1,57 @@
+name: '#3f3f3fѕᴛᴀᴛɪѕᴛɪᴄѕ'
+size: 54
+items:
+  btn-13:
+    slot: 13
+    item:
+      playerHead: '%zahstats_who_spent_most_money_name_vault%'
+      name: '#4cd5ff%zahstats_who_spent_most_money_name_vault% &r#3f3f3f• &f%zahstats_format_who_spent_most_money_amount_vault%$'
+      lore:
+        - '&8Who spent the most'
+  btn-20:
+    slot: 20
+    item:
+      playerHead: '%zahstats_who_purchased_most_items_name%'
+      name: '#4cd5ff%zahstats_who_purchased_most_items_name% &r#3f3f3f• &f%zahstats_who_purchased_most_items_amount%'
+      lore:
+        - '&8Who bought the most items'
+  btn-24:
+    slot: 24
+    item:
+      playerHead: '%zahstats_who_earned_most_money_name_vault%'
+      name: '#4cd5ff%zahstats_who_earned_most_money_name_vault% &r#3f3f3f• &f%zahstats_format_who_earned_most_money_amount_vault%$'
+      lore:
+        - '&8Who earned the most'
+  btn-40:
+    slot: 49
+    item:
+      material: BELL
+      name: '#4cd5ff&lѕᴛᴀᴛɪѕᴛɪᴄѕ'
+      lore:
+        - '#ffd353ℹ Informations#3f3f3f:'
+        - '#3f3f3f• &7All zAuctionHouse statistics will be displayed here. '
+        - '#3f3f3f• &7Discover the average price per item, the player who'
+        - '#3f3f3f• &7sold the most item and many other things!'
+        - ''
+        - '#ffd353⛃ Global Statistics#3f3f3f:'
+        - '#3f3f3f• &fItems listed for sale#3f3f3f: #4cd5ff%zahstats_item_sold_amount%'
+        - '#3f3f3f• &fItems purchased#3f3f3f: #4cd5ff%zahstats_item_purchase_amount%'
+        - '#3f3f3f• &fItems that have not been sold#3f3f3f: #4cd5ff%zahstats_number_of_items_not_sold%'
+        - '#3f3f3f• &fExpired items that have been destroyed#3f3f3f: #4cd5ff%zahstats_number_of_items_destroy%'
+        - '#3f3f3f• &fMoney spent#3f3f3f: #4cd5ff%zahstats_money_spend_format_vault%$'
+        - ''
+        - '#ffd353⛃ Your Statistics#3f3f3f:'
+        - '#3f3f3f• &fItems listed for sale#3f3f3f: #4cd5ff%zahstats_player_total_sales%'
+        - '#3f3f3f• &fItems purchased#3f3f3f: #4cd5ff%zahstats_player_total_purchases%'
+        - '#3f3f3f• &fMoney spent#3f3f3f: #4cd5ff%zahstats_player_total_format_earned_vault%$'
+        - '#3f3f3f• &fMoney earned#3f3f3f: #4cd5ff%zahstats_player_total_format_spent_vault%$'
+  btn-31:
+    slot: 31
+    item:
+      material: GRASS_BLOCK
+      name: '#4cd5ff&lɪᴛᴇᴍѕ ᴘʀɪᴄᴇѕ'
+      lore:
+        - '#3f3f3f• &fClick to display the average price per item'
+    type: INVENTORY
+    plugin: zAuctionHouseStats
+    inventory: stats_items

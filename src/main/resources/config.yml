@@ -9,7 +9,11 @@
 #  ╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░╚═╝╚═════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═════╝░
 #
 # Commands:
-# Items expiré qui ont été détruit
+# /zahstats - zauctionhouse.stats.use - Display commands
+# /zahstats reload - zauctionhouse.stats.reload - Reload configurations
+# /zahstats clearcache - zauctionhouse.stats.clearcache - Clear plugin cache
+# /ah price - zauctionhouse.price - Display item informations
+#
 # Global Placeholders (x8):
 # %zahstats_item_sold_amount% - The number of items listed for sale.
 # %zahstats_item_purchase_amount% - The number of items purchased.
@@ -78,6 +82,7 @@ sql:
 
 noName: "✘"
 noAmount: "0"
+loading: "Loading..."
 
 # Cache of 1 hour for the calculation of the price per items.
 cacheDurationMaterial: 3600000

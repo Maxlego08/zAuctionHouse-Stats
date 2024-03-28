@@ -14,6 +14,7 @@ import fr.maxlego08.stats.storage.SqlConnection;
 import fr.maxlego08.stats.zcore.ZPlugin;
 import fr.maxlego08.stats.zmenu.ZMenuManager;
 import fr.maxlego08.zauctionhouse.ZAuctionPlugin;
+import fr.maxlego08.zauctionhouse.api.AuctionManager;
 import fr.maxlego08.zauctionhouse.command.commands.CommandAuction;
 import org.bukkit.Bukkit;
 
@@ -43,6 +44,7 @@ public class StatsPlugin extends ZPlugin {
         placeholder.setPrefix("zahstats");
 
         this.files.add("stats");
+        this.files.add("stats_items");
 
         this.preEnable();
 
@@ -151,5 +153,10 @@ public class StatsPlugin extends ZPlugin {
 
     public ZMenuManager getMenuManager() {
         return menuManager;
+    }
+
+    public AuctionManager getAuctionManager() {
+        ZAuctionPlugin auctionPlugin = (ZAuctionPlugin) Bukkit.getPluginManager().getPlugin("zAuctionHouseV3");
+        return auctionPlugin.getAuctionManager();
     }
 }

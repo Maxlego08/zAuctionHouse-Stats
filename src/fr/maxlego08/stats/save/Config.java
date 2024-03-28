@@ -9,6 +9,7 @@ public class Config {
     public static boolean enableDebugTime = false;
     public static String noName = "✘";
     public static String noAmount = "0";
+    public static String loading = "Loading...";
     public static long cacheDurationMaterial = 3600000; // 1 hour in millisecondes
 
     /**
@@ -45,6 +46,7 @@ public class Config {
         enableDebugTime = configuration.getBoolean("enableDebugTime", false);
         noName = configuration.getString("noName", "X");
         noAmount = configuration.getString("noAmount", "0");
+        loading = configuration.getString("loading", "0");
 		cacheDurationMaterial = configuration.getLong("cacheDurationMaterial", 3600000);
     }
 

@@ -3,9 +3,12 @@ package fr.maxlego08.stats.zmenu;
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
 import fr.maxlego08.menu.api.pattern.PatternManager;
+import fr.maxlego08.menu.button.loader.NoneLoader;
 import fr.maxlego08.menu.exceptions.InventoryException;
 import fr.maxlego08.menu.zcore.utils.nms.NMSUtils;
 import fr.maxlego08.stats.StatsPlugin;
+import fr.maxlego08.stats.zmenu.buttons.ButtonItemStatistics;
+import fr.maxlego08.stats.zmenu.loader.StatisticLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +37,7 @@ public class ZMenuManager {
     public void loadButtons() {
         this.buttonManager.unregisters(this.plugin);
 
+        this.buttonManager.register(new StatisticLoader(this.plugin.getAuctionManager(), this.plugin));
     }
 
     public void loadInventories() {

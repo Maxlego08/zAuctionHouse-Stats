@@ -173,6 +173,10 @@ public class StatsManager extends ZUtils implements Listener {
             Optional<Map.Entry<UUID, Long>> optional = findTopSpender(economyName);
             return optional.isPresent() ? String.valueOf(optional.get().getValue()) : Config.noAmount;
         });
+        placeholder.register("format_who_spent_most_money_amount_", (player, economyName) -> {
+            Optional<Map.Entry<UUID, Long>> optional = findTopSpender(economyName);
+            return optional.isPresent() ? this.auctionManager.getPriceFormat(optional.get().getValue()) : Config.noAmount;
+        });
 
         placeholder.register("who_earned_most_money_name_", (player, economyName) -> {
             Optional<Map.Entry<UUID, Long>> optional = findTopEarner(economyName);
@@ -181,6 +185,10 @@ public class StatsManager extends ZUtils implements Listener {
         placeholder.register("who_earned_most_money_amount_", (player, economyName) -> {
             Optional<Map.Entry<UUID, Long>> optional = findTopEarner(economyName);
             return optional.isPresent() ? String.valueOf(optional.get().getValue()) : Config.noAmount;
+        });
+        placeholder.register("format_who_earned_most_money_amount_", (player, economyName) -> {
+            Optional<Map.Entry<UUID, Long>> optional = findTopEarner(economyName);
+            return optional.isPresent() ? this.auctionManager.getPriceFormat(optional.get().getValue()) : Config.noAmount;
         });
 
         placeholder.register("who_purchased_most_items_name_", (player, economyName) -> {

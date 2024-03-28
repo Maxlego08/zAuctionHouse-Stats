@@ -8,26 +8,30 @@ import fr.maxlego08.stats.api.global.GlobalKey;
 import fr.maxlego08.stats.api.global.GlobalValue;
 import fr.maxlego08.stats.api.utils.Pair;
 import fr.maxlego08.stats.placeholder.LocalPlaceholder;
+import fr.maxlego08.stats.placeholder.ReturnConsumer;
 import fr.maxlego08.stats.save.Config;
 import fr.maxlego08.stats.zcore.utils.ZUtils;
 import fr.maxlego08.zauctionhouse.api.AuctionItem;
+import fr.maxlego08.zauctionhouse.api.AuctionManager;
 import fr.maxlego08.zauctionhouse.api.economy.AuctionEconomy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class StatsManager extends ZUtils implements Listener {
 
     private final StatsPlugin plugin;
+    private final AuctionManager auctionManager;
     private EnumMap<GlobalKey, GlobalValue> globalValues;
     private Map<Pair<EconomyKey, String>, Long> economyValues = new HashMap<>();
     private Map<UUID, List<PlayerItemForSale>> playerSaleItems = new HashMap<>();
@@ -37,6 +41,7 @@ public class StatsManager extends ZUtils implements Listener {
     public StatsManager(StatsPlugin plugin) {
         this.plugin = plugin;
         this.globalValues = new EnumMap<>(GlobalKey.class);
+        this.auctionManager = plugin.getProvider(AuctionManager.class);
     }
 
     public void setGlobalValues(EnumMap<GlobalKey, GlobalValue> globalValues) {
@@ -103,18 +108,58 @@ public class StatsManager extends ZUtils implements Listener {
         }
 
         for (EconomyKey key : EconomyKey.values()) {
-            placeholder.register(key.name().toLowerCase() + "_", (player, economyName) -> String.valueOf(this.economyValues.getOrDefault(new Pair<>(key, economyName), 0L)));
+            placeholder.register(key.name().toLowerCase() + "_", (player, economyName) -> {
+                if (economyName.startsWith("format_")) {
+                    return this.auctionManager.getPriceFormat(this.economyValues.getOrDefault(new Pair<>(key, economyName.replace("format_", "")), 0L));
+                }
+                return String.valueOf(this.economyValues.getOrDefault(new Pair<>(key, economyName), 0L));
+            });
         }
+
+        placeholder.register("who_purchased_most_items_name", player -> {
+            Optional<Map.Entry<UUID, List<PlayerItemPurchased>>> optional = findTopBuyerByItemCount();
+            return optional.isPresent() ? returnPlayerName(optional.get()) : Config.noName;
+        });
+        placeholder.register("who_purchased_most_items_amount", player -> {
+            Optional<Map.Entry<UUID, List<PlayerItemPurchased>>> optional = findTopBuyerByItemCount();
+            return optional.map(uuidListEntry -> String.valueOf(uuidListEntry.getValue().size())).orElseGet(() -> Config.noAmount);
+        });
+
+        placeholder.register("who_sales_most_items_name", player -> {
+            Optional<Map.Entry<UUID, List<PlayerItemForSale>>> optional = findTopSellerByItemCount();
+            return optional.isPresent() ? returnPlayerName(optional.get()) : Config.noName;
+        });
+        placeholder.register("who_sales_most_items_amount", player -> {
+            Optional<Map.Entry<UUID, List<PlayerItemForSale>>> optional = findTopSellerByItemCount();
+            return optional.map(uuidListEntry -> String.valueOf(uuidListEntry.getValue().size())).orElseGet(() -> Config.noAmount);
+        });
     }
 
     public void registerPlayerPlaceholders() {
 
         LocalPlaceholder placeholder = LocalPlaceholder.getInstance();
-        placeholder.register("player_total_sales", player -> String.valueOf(this.playerStats.getOrDefault(player.getUniqueId(), new PlayerStats(player)).getTotalItemsSold()));
-        placeholder.register("player_total_purchases", player -> String.valueOf(this.playerStats.getOrDefault(player.getUniqueId(), new PlayerStats(player)).getTotalItemsBought()));
+        registerPlayerStats("player_total_sales", player -> String.valueOf(player.getTotalItemsSold()));
+        registerPlayerStats("player_total_purchases", player -> String.valueOf(player.getTotalItemsBought()));
+        registerPlayerStats("player_total_sales_format", player -> auctionManager.getPriceFormat(player.getTotalItemsSold()));
+        registerPlayerStats("player_total_purchases_format", player -> auctionManager.getPriceFormat(player.getTotalItemsBought()));
 
-        placeholder.register("player_total_earned_", (player, economyName) -> String.valueOf(this.playerPurchaseItems.values().stream().flatMap(List::stream).filter(item -> item.getSellerId().equals(player.getUniqueId()) && item.getEconomy().equals(economyName)).mapToLong(PlayerItemPurchased::getPrice).sum()));
-        placeholder.register("player_total_spent_", (player, economyName) -> String.valueOf(this.playerPurchaseItems.getOrDefault(player.getUniqueId(), new ArrayList<>()).stream().mapToLong(PlayerItemPurchased::getPrice).sum()));
+        placeholder.register("player_total_earned_", (player, economyName) -> String.valueOf(getPlayerTotalEarned(player, economyName)));
+        placeholder.register("player_total_spent_", (player, economyName) -> String.valueOf(getPlayerTotalSpent(player, economyName)));
+        placeholder.register("player_total_format_earned_", (player, economyName) -> auctionManager.getPriceFormat(getPlayerTotalEarned(player, economyName)));
+        placeholder.register("player_total_format_spent_", (player, economyName) -> auctionManager.getPriceFormat(getPlayerTotalSpent(player, economyName)));
+    }
+
+    private void registerPlayerStats(String key, ReturnConsumer<PlayerStats, String> consumer) {
+        LocalPlaceholder placeholder = LocalPlaceholder.getInstance();
+        placeholder.register(key, player -> consumer.accept(this.playerStats.getOrDefault(player.getUniqueId(), new PlayerStats(player))));
+    }
+
+    private long getPlayerTotalEarned(Player player, String economyName) {
+        return this.playerPurchaseItems.values().stream().flatMap(List::stream).filter(item -> item.getSellerId().equals(player.getUniqueId()) && item.getEconomy().equals(economyName)).mapToLong(PlayerItemPurchased::getPrice).sum();
+    }
+
+    private long getPlayerTotalSpent(Player player, String economyName) {
+        return this.playerPurchaseItems.getOrDefault(player.getUniqueId(), new ArrayList<>()).stream().filter(item -> item.getEconomy().equals(economyName)).mapToLong(PlayerItemPurchased::getPrice).sum();
     }
 
     public void registerRankingPlaceholders() {
@@ -122,55 +167,79 @@ public class StatsManager extends ZUtils implements Listener {
         LocalPlaceholder placeholder = LocalPlaceholder.getInstance();
         placeholder.register("who_spent_most_money_name_", (player, economyName) -> {
             Optional<Map.Entry<UUID, Long>> optional = findTopSpender(economyName);
-            if (optional.isPresent()) {
-                Map.Entry<UUID, Long> entry = optional.get();
-                UUID uuid = entry.getKey();
-                return this.playerStats.containsKey(entry.getKey()) ? this.playerStats.get(uuid).getName() : Bukkit.getOfflinePlayer(uuid).getName();
-            }
-            return Config.whoSpentMostMoneyEmptyMoney;
+            return optional.isPresent() ? returnPlayerName(optional.get()) : Config.noName;
         });
         placeholder.register("who_spent_most_money_amount_", (player, economyName) -> {
             Optional<Map.Entry<UUID, Long>> optional = findTopSpender(economyName);
-            if (optional.isPresent()) {
-                Map.Entry<UUID, Long> entry = optional.get();
-                return String.valueOf(entry.getValue());
-            }
-            return Config.whoSpentMostMoneyEmptyMoney;
+            return optional.isPresent() ? String.valueOf(optional.get().getValue()) : Config.noAmount;
+        });
+
+        placeholder.register("who_earned_most_money_name_", (player, economyName) -> {
+            Optional<Map.Entry<UUID, Long>> optional = findTopEarner(economyName);
+            return optional.isPresent() ? returnPlayerName(optional.get()) : Config.noName;
+        });
+        placeholder.register("who_earned_most_money_amount_", (player, economyName) -> {
+            Optional<Map.Entry<UUID, Long>> optional = findTopEarner(economyName);
+            return optional.isPresent() ? String.valueOf(optional.get().getValue()) : Config.noAmount;
+        });
+
+        placeholder.register("who_purchased_most_items_name_", (player, economyName) -> {
+            Optional<Map.Entry<UUID, List<PlayerItemPurchased>>> optional = findTopBuyerByItemCount(economyName);
+            return optional.isPresent() ? returnPlayerName(optional.get()) : Config.noName;
+        });
+        placeholder.register("who_purchased_most_items_amount_", (player, economyName) -> {
+            Optional<Map.Entry<UUID, List<PlayerItemPurchased>>> optional = findTopBuyerByItemCount(economyName);
+            return optional.map(uuidListEntry -> String.valueOf(uuidListEntry.getValue().size())).orElseGet(() -> Config.noAmount);
+        });
+
+        placeholder.register("who_sales_most_items_name_", (player, economyName) -> {
+            Optional<Map.Entry<UUID, List<PlayerItemForSale>>> optional = findTopSellerByItemCount(economyName);
+            return optional.isPresent() ? returnPlayerName(optional.get()) : Config.noName;
+        });
+        placeholder.register("who_sales_most_items_amount_", (player, economyName) -> {
+            Optional<Map.Entry<UUID, List<PlayerItemForSale>>> optional = findTopSellerByItemCount(economyName);
+            return optional.map(uuidListEntry -> String.valueOf(uuidListEntry.getValue().size())).orElseGet(() -> Config.noAmount);
         });
 
     }
 
+    private String returnPlayerName(Map.Entry<UUID, ?> entry) {
+        UUID uuid = entry.getKey();
+        return this.playerStats.containsKey(entry.getKey()) ? this.playerStats.get(uuid).getName() : Bukkit.getOfflinePlayer(uuid).getName();
+    }
+
     public Optional<Map.Entry<UUID, Long>> findTopSpender(String economyName) {
-        Map<UUID, Long> spendingPerPlayer = new HashMap<>();
-
-        if (this.playerPurchaseItems.isEmpty()) return Optional.empty();
-
-        for (List<PlayerItemPurchased> purchases : playerPurchaseItems.values()) {
-            for (PlayerItemPurchased purchase : purchases) {
-                if (purchase.getEconomy().equals(economyName)) {
-                    spendingPerPlayer.merge(purchase.getPlayerId(), purchase.getPrice(), Long::sum);
-                }
-            }
-        }
-
-        return Optional.of(Collections.max(spendingPerPlayer.entrySet(), Map.Entry.comparingByValue()));
+        return this.playerPurchaseItems.values().stream().flatMap(List::stream).filter(purchase -> purchase.getEconomy().equals(economyName)).collect(Collectors.groupingBy(PlayerItemPurchased::getPlayerId, Collectors.summingLong(PlayerItemPurchased::getPrice))).entrySet().stream().max(Map.Entry.comparingByValue());
     }
 
 
     public Optional<Map.Entry<UUID, Long>> findTopEarner(String economyName) {
-        Map<UUID, Long> earningsPerPlayer = new HashMap<>();
-
-        if (this.playerSaleItems.isEmpty()) return Optional.empty();
-
-        for (List<PlayerItemForSale> sales : playerSaleItems.values()) {
-            for (PlayerItemForSale sale : sales) {
-                if (sale.getEconomy().equals(economyName)) {
-                    earningsPerPlayer.merge(sale.getPlayerId(), sale.getPrice(), Long::sum);
-                }
-            }
-        }
-
-        return Optional.of(Collections.max(earningsPerPlayer.entrySet(), Map.Entry.comparingByValue()));
+        return this.playerSaleItems.values().stream().flatMap(List::stream).filter(sale -> sale.getEconomy().equals(economyName)).collect(Collectors.groupingBy(PlayerItemForSale::getPlayerId, Collectors.summingLong(PlayerItemForSale::getPrice))).entrySet().stream().max(Map.Entry.comparingByValue());
     }
+
+    public Optional<Map.Entry<UUID, List<PlayerItemForSale>>> findTopSellerByItemCount(String economyName) {
+        return playerSaleItems.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream()
+                        .filter(sale -> sale.getEconomy().equals(economyName)).collect(Collectors.toList())))
+                .entrySet().stream()
+                .max(Comparator.comparingInt(entry -> entry.getValue().size()));
+    }
+
+    public Optional<Map.Entry<UUID, List<PlayerItemPurchased>>> findTopBuyerByItemCount(String economyName) {
+        return playerPurchaseItems.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream()
+                        .filter(purchase -> purchase.getEconomy().equals(economyName)).collect(Collectors.toList())))
+                .entrySet().stream()
+                .max(Comparator.comparingInt(entry -> entry.getValue().size()));
+    }
+
+    public Optional<Map.Entry<UUID, List<PlayerItemForSale>>> findTopSellerByItemCount() {
+        return playerSaleItems.entrySet().stream().max(Comparator.comparingInt(entry -> entry.getValue().size()));
+    }
+
+    public Optional<Map.Entry<UUID, List<PlayerItemPurchased>>> findTopBuyerByItemCount() {
+        return playerPurchaseItems.entrySet().stream().max(Comparator.comparingInt(entry -> entry.getValue().size()));
+    }
+
 
 }

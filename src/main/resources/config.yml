@@ -24,16 +24,32 @@
 # Global Economy Placeholders:
 # %zahstats_money_spend_<economy name>% - Total money spent in the auction house.
 # %zahstats_total_price_of_all_items_sold_<economy name>% - Cumulative price of all items that were listed for sale.
+# %zahstats_money_spend_format_<economy name>% - Total money spent in the auction house.
+# %zahstats_total_price_of_all_items_sold_format_<economy name>% - Cumulative price of all items that were listed for sale.
 #
 # Player Placeholders:
 # %zahstats_player_total_sales% - Total items on sale
 # %zahstats_player_total_purchases% - Total items purchased
+# %zahstats_player_total_sales_format% - Total items on sale formatted
+# %zahstats_player_total_purchases_format% - Total items purchased formatted
 # %zahstats_player_total_earned_<economy name>% - Total money earned
 # %zahstats_player_total_spent_<economy name>% - Total money spent
+# %zahstats_player_total_format_earned_<economy name>% - Total money earned formatted
+# %zahstats_player_total_format_spent_<economy name>% - Total money spent formatted
 #
 # Ranking Placeholders:
-# %zahstats_who_spent_most_money_name_<economy>% - Who spent the most - Name
-# %zahstats_who_spent_most_money_amount_<economy>% - Who spent the most - Amount
+# %zahstats_who_spent_most_money_name_<economy name>% - Who spent the most - Name
+# %zahstats_who_spent_most_money_amount_<economy name>% - Who spent the most - Amount
+# %zahstats_who_earned_most_money_name_<economy name>% - Who earned the most - Name
+# %zahstats_who_earned_most_money_amount_<economy name>% - Who earned the most - Amount
+# %zahstats_who_purchased_most_items_name_<economy name>% - Who purchased the most - Name
+# %zahstats_who_purchased_most_items_amount_<economy name>% - Who purchased the most - Amount
+# %zahstats_who_sales_most_items_name_<economy name>% - Who sales the most - Name
+# %zahstats_who_sales_most_items_amount_<economy name>% - Who sales the most - Amount
+# %zahstats_who_purchased_most_items_name% - Who purchased the most - Name
+# %zahstats_who_purchased_most_items_amount% - Who purchased the most - Amount
+# %zahstats_who_sales_most_items_name% - Who sales the most - Name
+# %zahstats_who_sales_most_items_amount% - Who sales the most - Amount
 #
 #########################################################################################################################################
 
@@ -50,5 +66,5 @@ sql:
   password: 'secret'
   database: zauctionhouse
 
-whoSpentMostMoneyEmptyName: "✘"
-whoSpentMostMoneyEmptyMoney: "0"
+noName: "✘"
+noAmount: "0"

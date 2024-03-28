@@ -23,7 +23,7 @@ import java.sql.SQLException;
  */
 public class StatsPlugin extends ZPlugin {
 
-    private final StatsManager manager = new StatsManager(this);
+    private StatsManager manager;
     private SqlConnection connection;
     private GlobalStatsTable globalStatsTable;
     private GlobalEconomyStatsTable globalEconomyStatsTable;
@@ -39,6 +39,7 @@ public class StatsPlugin extends ZPlugin {
 
         this.preEnable();
 
+        this.manager = new StatsManager(this);
         this.saveDefaultConfig();
 
         this.registerCommand("zahstats", new CommandStats(this), "zahs");

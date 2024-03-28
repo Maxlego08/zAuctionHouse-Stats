@@ -91,6 +91,7 @@ public class StatsPlugin extends ZPlugin {
         this.manager.registerGlobalPlaceholders();
         this.manager.registerPlayerPlaceholders();
         this.manager.registerRankingPlaceholders();
+        this.manager.registerItemPlaceholders();
 
         ZAuctionPlugin auctionPlugin = (ZAuctionPlugin) Bukkit.getPluginManager().getPlugin("zAuctionHouseV3");
         CommandAuction commandAuction = auctionPlugin.getCommandAuction();

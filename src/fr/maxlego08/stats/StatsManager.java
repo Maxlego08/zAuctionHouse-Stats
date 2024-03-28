@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -254,4 +255,29 @@ public class StatsManager extends ZUtils implements Listener {
     public void clearCaches() {
         this.itemPriceStatistics.clear();
     }
+
+    public void registerItemPlaceholders() {
+        LocalPlaceholder placeholder = LocalPlaceholder.getInstance();
+
+        registerPlaceholder(placeholder, "material_average_", (economy, material) -> String.valueOf((int) this.itemPriceStatistics.getAverage(economy, material)));
+        registerPlaceholder(placeholder, "material_median_", (economy, material) -> String.valueOf((int) this.itemPriceStatistics.getMedian(economy, material)));
+        registerPlaceholder(placeholder, "material_amount_", (economy, material) -> String.valueOf(this.itemPriceStatistics.getItemCount(economy, material)));
+        registerPlaceholder(placeholder, "material_format_average_", (economy, material) -> this.auctionManager.getPriceFormat((int) this.itemPriceStatistics.getAverage(economy, material)));
+        registerPlaceholder(placeholder, "material_format_median_", (economy, material) -> this.auctionManager.getPriceFormat((int) this.itemPriceStatistics.getMedian(economy, material)));
+        registerPlaceholder(placeholder, "material_format_amount_", (economy, material) -> this.auctionManager.getPriceFormat(this.itemPriceStatistics.getItemCount(economy, material)));
+    }
+
+    private void registerPlaceholder(LocalPlaceholder placeholder, String prefix, BiFunction<String, String, String> function) {
+        placeholder.register(prefix, (player, args) -> {
+            String[] values = args.split("_", 2);
+            if (values.length == 2) {
+                String economyName = values[0];
+                String materialName = values[1];
+                return function.apply(economyName, materialName);
+            }
+            return "0";
+        });
+    }
+
+
 }

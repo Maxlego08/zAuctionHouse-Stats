@@ -51,6 +51,14 @@
 # %zahstats_who_sales_most_items_name% - Who sales the most - Name
 # %zahstats_who_sales_most_items_amount% - Who sales the most - Amount
 #
+# Material Placeholders:
+# %zahstats_material_average_<economy name>_<material>% - Average price of an item
+# %zahstats_material_median_<economy name>_<material>% - Median price of an item
+# %zahstats_material_amount_<economy name>_<material>% - Amount of items
+# %zahstats_material_format_average_<economy name>_<material>% - Average price of an item
+# %zahstats_material_format_median_<economy name>_<material>% - Median price of an item
+# %zahstats_material_format_amount_<economy name>_<material>% - Amount of items
+#
 #########################################################################################################################################
 
 # Displays more information in the console, if you have a problem please enable this option and send errors to support.

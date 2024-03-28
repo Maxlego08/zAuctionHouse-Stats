@@ -78,6 +78,7 @@ sql:
 
 noName: "✘"
 noAmount: "0"
+loading: "Loading..."
 
 # Cache of 1 hour for the calculation of the price per items.
 cacheDurationMaterial: 3600000

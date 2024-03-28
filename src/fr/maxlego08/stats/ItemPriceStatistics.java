@@ -16,12 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class ItemPriceStatistics extends ZUtils {
 
     private final StatsManager manager;
-    private final Map<String, CacheEntry> cache = new HashMap<>();
+    private final ConcurrentHashMap<String, CacheEntry> cache = new ConcurrentHashMap<>();
     private final long periodStart;
 
     public ItemPriceStatistics(StatsManager manager, long periodStart) {
@@ -38,7 +39,7 @@ public class ItemPriceStatistics extends ZUtils {
         return entry != null && System.currentTimeMillis() - entry.lastUpdateTime < Config.cacheDurationMaterial;
     }
 
-    private void updateCacheIfNeeded(String economyName, String materialName) {
+    public void updateCacheIfNeeded(String economyName, String materialName) {
         String cacheKey = buildCacheKey(economyName, materialName);
         if (!isCacheValid(cacheKey)) {
             calculateAverageAndMedianPrice(economyName, materialName, cacheKey);
@@ -120,6 +121,10 @@ public class ItemPriceStatistics extends ZUtils {
 
     public void clear() {
         this.cache.clear();
+    }
+
+    public boolean isCache(String materialName, String economyName) {
+        return this.isCacheValid(buildCacheKey(economyName, materialName));
     }
 
     private static class CacheEntry {

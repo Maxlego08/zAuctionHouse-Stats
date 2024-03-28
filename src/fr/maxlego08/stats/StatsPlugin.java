@@ -1,5 +1,6 @@
 package fr.maxlego08.stats;
 
+import fr.maxlego08.stats.command.commands.CommandAuctionPrice;
 import fr.maxlego08.stats.command.commands.CommandStats;
 import fr.maxlego08.stats.placeholder.LocalPlaceholder;
 import fr.maxlego08.stats.save.Config;
@@ -11,6 +12,8 @@ import fr.maxlego08.stats.storage.PlayerItemSaleTable;
 import fr.maxlego08.stats.storage.PlayerStatsTable;
 import fr.maxlego08.stats.storage.SqlConnection;
 import fr.maxlego08.stats.zcore.ZPlugin;
+import fr.maxlego08.zauctionhouse.ZAuctionPlugin;
+import fr.maxlego08.zauctionhouse.command.commands.CommandAuction;
 import org.bukkit.Bukkit;
 
 import java.sql.SQLException;
@@ -88,6 +91,10 @@ public class StatsPlugin extends ZPlugin {
         this.manager.registerGlobalPlaceholders();
         this.manager.registerPlayerPlaceholders();
         this.manager.registerRankingPlaceholders();
+
+        ZAuctionPlugin auctionPlugin = (ZAuctionPlugin) Bukkit.getPluginManager().getPlugin("zAuctionHouseV3");
+        CommandAuction commandAuction = auctionPlugin.getCommandAuction();
+        commandAuction.addSubCommand(new CommandAuctionPrice(auctionPlugin, this));
 
         this.postEnable();
     }

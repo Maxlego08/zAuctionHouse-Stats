@@ -68,3 +68,6 @@ sql:
 
 noName: "✘"
 noAmount: "0"
+
+# Cache of 1 hour for the calculation of the price per items.
+cacheDurationMaterial: 3600000

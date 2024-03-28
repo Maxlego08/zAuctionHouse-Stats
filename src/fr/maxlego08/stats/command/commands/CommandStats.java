@@ -10,7 +10,8 @@ public class CommandStats extends VCommand {
 	public CommandStats(StatsPlugin plugin) {
 		super(plugin);
 		this.setPermission(Permission.ZAUCTIONHOUSE_STATS_USE);
-		this.addSubCommand(new CommandTemplateReload(plugin));
+		this.addSubCommand(new CommandStatsReload(plugin));
+		this.addSubCommand(new CommandStatsClearCache(plugin));
 	}
 
 	@Override

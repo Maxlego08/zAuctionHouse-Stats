@@ -21,13 +21,12 @@ public abstract class MessageUtils extends LocationUtils {
 
     private final transient static int CENTER_PX = 154;
 
-    /**
-     * @param player
-     * @param message
-     * @param args
-     */
-    protected void messageWO(CommandSender player, Message message, Object... args) {
-        player.sendMessage(getMessage(message, args));
+    protected void messageWO(CommandSender sender, Message message, Object... args) {
+        if (message.getMessages().size() > 0) {
+            message.getMessages().forEach(msg -> sender.sendMessage(getMessage(msg, args)));
+        } else {
+            sender.sendMessage(getMessage(message, args));
+        }
     }
 
     /**

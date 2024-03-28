@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StatsManager extends ZUtils implements Listener {
 
@@ -37,11 +38,13 @@ public class StatsManager extends ZUtils implements Listener {
     private Map<UUID, List<PlayerItemForSale>> playerSaleItems = new HashMap<>();
     private Map<UUID, List<PlayerItemPurchased>> playerPurchaseItems = new HashMap<>();
     private Map<UUID, PlayerStats> playerStats = new HashMap<>();
+    private final ItemPriceStatistics itemPriceStatistics;
 
     public StatsManager(StatsPlugin plugin) {
         this.plugin = plugin;
         this.globalValues = new EnumMap<>(GlobalKey.class);
         this.auctionManager = plugin.getProvider(AuctionManager.class);
+        this.itemPriceStatistics = new ItemPriceStatistics(this, 0);
     }
 
     public void setGlobalValues(EnumMap<GlobalKey, GlobalValue> globalValues) {
@@ -241,5 +244,15 @@ public class StatsManager extends ZUtils implements Listener {
         return playerPurchaseItems.entrySet().stream().max(Comparator.comparingInt(entry -> entry.getValue().size()));
     }
 
+    public Stream<PlayerItemPurchased> getPlayerPurchaseItems() {
+        return playerPurchaseItems.values().stream().flatMap(List::stream);
+    }
 
+    public ItemPriceStatistics getItemPriceStatistics() {
+        return itemPriceStatistics;
+    }
+
+    public void clearCaches() {
+        this.itemPriceStatistics.clear();
+    }
 }

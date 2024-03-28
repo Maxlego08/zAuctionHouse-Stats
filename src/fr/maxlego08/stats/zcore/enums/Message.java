@@ -42,8 +42,23 @@ public enum Message {
     COMMAND_SYNTAXE_HELP("§f%syntax% §7» §7%description%"),
 
     RELOAD("§aYou have just reloaded the configuration files."),
+    CLEAR("§aYou just clear the plugin cache."),
 
     DESCRIPTION_RELOAD("Reload configuration files"),
+    DESCRIPTION_CLEARCACHE("Clear plugin cache"),
+
+    PRICE_ERROR("§cYou must have an item in your hand."),
+    PRICE_ECONOMY("§cUnable to to find the economy §f%economy%§c."),
+    PRICE_INFORMATIONS(
+            "",
+            "§8[§bℹ§8] §7Informations",
+            "§8• §fEconomy§8: §a%economy%",
+            "§8• §fItem§8: §a%itemName%",
+            "§8• §fNumber of items§8: §a%amount%",
+            "§8• §fAverage price§8: §e%average%",
+            "§8• §fMedian price§8: §6%median%",
+            ""
+    ),
 
     ;
 

@@ -2,7 +2,9 @@ package fr.maxlego08.stats.api;
 
 import fr.maxlego08.zauctionhouse.api.AuctionItem;
 import fr.maxlego08.zauctionhouse.api.enums.AuctionType;
+import fr.maxlego08.zauctionhouse.zcore.utils.nms.ItemStackUtils;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -12,10 +14,11 @@ public class PlayerItemForSale {
     private final String itemStack;
     private final long price;
     private final String economy;
-    private final String auctionType;
+    private final AuctionType auctionType;
     private final long expireAt;
     private final long createdAt;
     private long id;
+    private ItemStack itemStackContent = null;
 
     public PlayerItemForSale(long id, UUID playerId, String playerName, String itemStack, long price, String economy, String auctionType, long expireAt, long createdAt) {
         this.id = id;
@@ -24,7 +27,7 @@ public class PlayerItemForSale {
         this.itemStack = itemStack;
         this.price = price;
         this.economy = economy;
-        this.auctionType = auctionType;
+        this.auctionType = AuctionType.valueOf(auctionType);
         this.expireAt = expireAt;
         this.createdAt = expireAt;
     }
@@ -35,9 +38,10 @@ public class PlayerItemForSale {
         this.itemStack = auctionItem.getType() == AuctionType.INVENTORY ? String.join(",", auctionItem.serializedItems()) : auctionItem.serializedItem();
         this.price = auctionItem.getPrice();
         this.economy = auctionItem.getEconomyName();
-        this.auctionType = auctionItem.getType().name();
+        this.auctionType = auctionItem.getType();
         this.expireAt = auctionItem.getExpireAt();
         this.createdAt = System.currentTimeMillis();
+        this.itemStackContent = auctionItem.getType() == AuctionType.DEFAULT ? auctionItem.getItemStack().clone() : null;
     }
 
 
@@ -69,7 +73,7 @@ public class PlayerItemForSale {
         return economy;
     }
 
-    public String getAuctionType() {
+    public AuctionType getAuctionType() {
         return auctionType;
     }
 
@@ -80,4 +84,19 @@ public class PlayerItemForSale {
     public long getExpireAt() {
         return expireAt;
     }
+
+    public String getType() {
+        if (this.auctionType == null || this.auctionType != AuctionType.DEFAULT) return "";
+
+        try {
+            if (this.itemStackContent == null) {
+                this.itemStackContent = ItemStackUtils.deserializeItemStack(this.itemStack);
+            }
+
+            return this.itemStackContent.getType().name();
+        } catch (Exception exception) {
+            return "";
+        }
+    }
+
 }

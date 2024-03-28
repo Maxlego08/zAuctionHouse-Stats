@@ -5,7 +5,7 @@ public enum Permission {
 	ZAUCTIONHOUSE_STATS_USE,
 	ZAUCTIONHOUSE_STATS_RELOAD,
 
-	;
+    ZAUCTIONHOUSE_STATS_CLEARCACHE;
 
 	private String permission;
 

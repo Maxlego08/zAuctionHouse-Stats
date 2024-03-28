@@ -47,7 +47,7 @@ public class PlayerItemSaleTable extends Table {
                 statement.setString(3, item.getItemStack());
                 statement.setLong(4, item.getPrice());
                 statement.setString(5, item.getEconomy());
-                statement.setString(6, item.getAuctionType());
+                statement.setString(6, item.getAuctionType().name());
                 statement.setLong(7, item.getExpireAt());
                 statement.setLong(8, item.getCreatedAt());
                 int affectedRows = statement.executeUpdate();

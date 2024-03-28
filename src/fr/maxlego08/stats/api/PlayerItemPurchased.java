@@ -2,7 +2,9 @@ package fr.maxlego08.stats.api;
 
 import fr.maxlego08.zauctionhouse.api.AuctionItem;
 import fr.maxlego08.zauctionhouse.api.enums.AuctionType;
+import fr.maxlego08.zauctionhouse.zcore.utils.nms.ItemStackUtils;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ public class PlayerItemPurchased {
     private final long purchaseTime;
     private final AuctionType auctionType;
     private long id;
+    private ItemStack itemStackContent = null;
 
     public PlayerItemPurchased(UUID playerId, String playerName, String itemStack, long price, String economy, UUID sellerId, String sellerName, long purchaseTime, AuctionType auctionType) {
         this.playerId = playerId;
@@ -40,6 +43,7 @@ public class PlayerItemPurchased {
         this.sellerId = auctionItem.getSellerUniqueId();
         this.sellerName = auctionItem.getSellerName();
         this.auctionType = auctionItem.getType();
+        this.itemStackContent = auctionItem.getType() == AuctionType.INVENTORY ? null : auctionItem.getItemStack().clone();
     }
 
     public long getId() {
@@ -84,5 +88,19 @@ public class PlayerItemPurchased {
 
     public AuctionType getAuctionType() {
         return auctionType;
+    }
+
+    public String getType() {
+        if (this.auctionType == null || this.auctionType != AuctionType.DEFAULT) return "";
+
+        try {
+            if (this.itemStackContent == null) {
+                this.itemStackContent = ItemStackUtils.deserializeItemStack(this.itemStack);
+            }
+
+            return this.itemStackContent.getType().name();
+        } catch (Exception exception) {
+            return "";
+        }
     }
 }

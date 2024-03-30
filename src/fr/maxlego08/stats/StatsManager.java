@@ -221,7 +221,7 @@ public class StatsManager extends ZUtils implements Listener {
     }
 
     public Optional<Map.Entry<UUID, Long>> findTopEarner(String economyName) {
-        return this.playerSaleItems.values().stream().flatMap(List::stream).filter(sale -> sale.getEconomy().equals(economyName)).collect(Collectors.groupingBy(PlayerItemForSale::getPlayerId, Collectors.summingLong(PlayerItemForSale::getPrice))).entrySet().stream().max(Map.Entry.comparingByValue());
+        return this.playerPurchaseItems.values().stream().flatMap(List::stream).filter(sale -> sale.getEconomy().equals(economyName)).collect(Collectors.groupingBy(PlayerItemPurchased::getSellerId, Collectors.summingLong(PlayerItemPurchased::getPrice))).entrySet().stream().max(Map.Entry.comparingByValue());
     }
 
     public Optional<Map.Entry<UUID, List<PlayerItemForSale>>> findTopSellerByItemCount(String economyName) {

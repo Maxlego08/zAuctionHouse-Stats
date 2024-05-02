@@ -64,7 +64,22 @@
                             </excludes>
                         </filter>
                     </filters>
+                    <relocations>
+                        <!-- Relocate your package to avoid conflicts -->
+                        <relocation>
+                            <pattern>fr.maxlego08.sarah</pattern>
+                            <shadedPattern>fr.maxlego08.stats.zcore.utils.sarah</shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -125,13 +140,19 @@
             <artifactId>zAuctionHouseV3-API</artifactId>
             <version>3.2.1.2</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.1.2.jar</systemPath>
+            <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.1.4.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.Maxlego08</groupId>
             <artifactId>zMenu-API</artifactId>
             <version>1.0.2.7</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Maxlego08</groupId>
+            <artifactId>Sarah</artifactId>
+            <version>722727e59d</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

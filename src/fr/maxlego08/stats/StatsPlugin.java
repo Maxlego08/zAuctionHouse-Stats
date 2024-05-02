@@ -1,7 +1,13 @@
 package fr.maxlego08.stats;
 
+import fr.maxlego08.sarah.MigrationManager;
 import fr.maxlego08.stats.command.commands.CommandAuctionPrice;
 import fr.maxlego08.stats.command.commands.CommandStats;
+import fr.maxlego08.stats.migrations.GlobalEconomyStatsMigration;
+import fr.maxlego08.stats.migrations.GlobalStatsMigration;
+import fr.maxlego08.stats.migrations.PlayerItemPurchasedMigration;
+import fr.maxlego08.stats.migrations.PlayerItemSaleMigration;
+import fr.maxlego08.stats.migrations.PlayerStatsMigration;
 import fr.maxlego08.stats.placeholder.LocalPlaceholder;
 import fr.maxlego08.stats.save.Config;
 import fr.maxlego08.stats.save.MessageLoader;
@@ -62,7 +68,7 @@ public class StatsPlugin extends ZPlugin {
         service.execute(() -> {
 
             this.connection = new SqlConnection(this);
-            if (!this.connection.isValid()) {
+            if (!this.connection.getDatabaseConnection().isValid()) {
                 getLogger().severe("Unable to connect to database !");
                 Bukkit.getPluginManager().disablePlugin(this);
                 return;
@@ -73,15 +79,13 @@ public class StatsPlugin extends ZPlugin {
             this.playerItemSaleTable = new PlayerItemSaleTable(this.connection);
             this.playerItemPurchasedTable = new PlayerItemPurchasedTable(this.connection);
             this.playerStatsTable = new PlayerStatsTable(this.connection);
-            try {
-                this.globalStatsTable.create();
-                this.globalEconomyStatsTable.create();
-                this.playerItemSaleTable.create();
-                this.playerItemPurchasedTable.create();
-                this.playerStatsTable.create();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
+
+            MigrationManager.registerMigration(new GlobalStatsMigration());
+            MigrationManager.registerMigration(new GlobalEconomyStatsMigration());
+            MigrationManager.registerMigration(new PlayerItemSaleMigration());
+            MigrationManager.registerMigration(new PlayerItemPurchasedMigration());
+            MigrationManager.registerMigration(new PlayerStatsMigration());
+            MigrationManager.execute(this.connection.getConnection(), this.connection.getDatabaseConnection().getDatabaseConfiguration(), this.getLogger());
 
             try {
                 this.manager.setGlobalValues(this.globalStatsTable.selectAll());
@@ -118,7 +122,7 @@ public class StatsPlugin extends ZPlugin {
         this.preDisable();
 
         this.saveFiles();
-        this.connection.disconnect();
+        this.connection.getDatabaseConnection().disconnect();
 
         this.postDisable();
     }

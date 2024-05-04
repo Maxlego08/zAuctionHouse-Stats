@@ -74,11 +74,11 @@ public class StatsPlugin extends ZPlugin {
                 return;
             }
 
-            this.globalStatsTable = new GlobalStatsTable(this.connection);
-            this.globalEconomyStatsTable = new GlobalEconomyStatsTable(this.connection);
-            this.playerItemSaleTable = new PlayerItemSaleTable(this.connection);
-            this.playerItemPurchasedTable = new PlayerItemPurchasedTable(this.connection);
-            this.playerStatsTable = new PlayerStatsTable(this.connection);
+            this.globalStatsTable = new GlobalStatsTable(this.connection.getDatabaseConnection(), this.getLogger());
+            this.globalEconomyStatsTable = new GlobalEconomyStatsTable(this.connection.getDatabaseConnection(), this.getLogger());
+            this.playerItemSaleTable = new PlayerItemSaleTable(this.connection.getDatabaseConnection(), this.getLogger());
+            this.playerItemPurchasedTable = new PlayerItemPurchasedTable(this.connection.getDatabaseConnection(), this.getLogger());
+            this.playerStatsTable = new PlayerStatsTable(this.connection.getDatabaseConnection(), this.getLogger());
 
             MigrationManager.registerMigration(new GlobalStatsMigration());
             MigrationManager.registerMigration(new GlobalEconomyStatsMigration());

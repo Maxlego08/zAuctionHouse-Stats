@@ -7,7 +7,7 @@ public class GlobalStatsMigration extends Migration {
     @Override
     public void up() {
         SchemaBuilder.create(this, "zah_stats_global", table -> {
-            table.string("key", 255);
+            table.string("key", 255).primary();
             table.string("value", 255);
         });
     }

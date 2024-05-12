@@ -74,6 +74,9 @@ enableDebug: false
 enableDebugTime: false
 
 sql:
+  # Available type: MYSQL and SQLITE
+  type: MYSQL
+  debug: false
   host: 192.168.10.10
   port: 3306
   user: homestead

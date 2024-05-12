@@ -1,5 +1,6 @@
 package fr.maxlego08.stats.api;
 
+import fr.maxlego08.stats.dto.PlayerStatsDTO;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -23,6 +24,17 @@ public class PlayerStats {
         this.lastItemBoughtAt = lastItemBoughtAt;
         this.firstItemSoldAt = firstItemSoldAt;
         this.lastItemSoldAt = lastItemSoldAt;
+    }
+
+    public PlayerStats(PlayerStatsDTO dto) {
+        this.uuid = dto.uuid();
+        this.name = dto.name();
+        this.totalItemsSold = dto.total_items_sold();
+        this.totalItemsBought = dto.total_items_bought();
+        this.firstItemBoughtAt = dto.first_item_bought_at();
+        this.lastItemBoughtAt = dto.last_item_bought_at();
+        this.firstItemSoldAt = dto.first_item_sold_at();
+        this.lastItemSoldAt = dto.last_item_sold_at();
     }
 
     public PlayerStats(Player player) {

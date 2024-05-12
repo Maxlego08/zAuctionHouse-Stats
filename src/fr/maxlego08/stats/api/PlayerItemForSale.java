@@ -1,5 +1,6 @@
 package fr.maxlego08.stats.api;
 
+import fr.maxlego08.stats.dto.PlayerItemForSaleDTO;
 import fr.maxlego08.zauctionhouse.api.AuctionItem;
 import fr.maxlego08.zauctionhouse.api.enums.AuctionType;
 import fr.maxlego08.zauctionhouse.zcore.utils.nms.ItemStackUtils;
@@ -29,7 +30,19 @@ public class PlayerItemForSale {
         this.economy = economy;
         this.auctionType = AuctionType.valueOf(auctionType);
         this.expireAt = expireAt;
-        this.createdAt = expireAt;
+        this.createdAt = createdAt;
+    }
+
+    public PlayerItemForSale(PlayerItemForSaleDTO playerItemForSaleDTO) {
+        this.id = playerItemForSaleDTO.id();
+        this.playerId = playerItemForSaleDTO.player_id();
+        this.playerName = playerItemForSaleDTO.player_name();
+        this.itemStack = playerItemForSaleDTO.itemStack();
+        this.price = playerItemForSaleDTO.price();
+        this.economy = playerItemForSaleDTO.economy();
+        this.auctionType = playerItemForSaleDTO.auction_type();
+        this.expireAt = playerItemForSaleDTO.expire_at();
+        this.createdAt = playerItemForSaleDTO.created_at();
     }
 
     public PlayerItemForSale(AuctionItem auctionItem, Player player) {

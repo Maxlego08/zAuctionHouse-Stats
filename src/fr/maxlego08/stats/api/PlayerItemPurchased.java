@@ -1,5 +1,6 @@
 package fr.maxlego08.stats.api;
 
+import fr.maxlego08.stats.dto.PlayerItemPurchasedDTO;
 import fr.maxlego08.zauctionhouse.api.AuctionItem;
 import fr.maxlego08.zauctionhouse.api.enums.AuctionType;
 import fr.maxlego08.zauctionhouse.zcore.utils.nms.ItemStackUtils;
@@ -31,6 +32,18 @@ public class PlayerItemPurchased {
         this.sellerName = sellerName;
         this.purchaseTime = purchaseTime;
         this.auctionType = auctionType;
+    }
+
+    public PlayerItemPurchased(PlayerItemPurchasedDTO dto) {
+        this.playerId = dto.player_id();
+        this.playerName = dto.player_name();
+        this.itemStack = dto.itemStack();
+        this.price = dto.price();
+        this.economy = dto.economy();
+        this.sellerId = dto.seller_id();
+        this.sellerName = dto.seller_name();
+        this.purchaseTime = dto.purchase_time();
+        this.auctionType = dto.auction_type();
     }
 
     public PlayerItemPurchased(AuctionItem auctionItem, Player player) {

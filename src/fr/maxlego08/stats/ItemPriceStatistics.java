@@ -12,12 +12,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 public class ItemPriceStatistics extends ZUtils {
 
@@ -46,13 +43,26 @@ public class ItemPriceStatistics extends ZUtils {
         }
     }
 
+    private boolean checkItems(ItemStack itemStack, String value) {
+
+        if (itemStack == null) return false;
+
+        if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasCustomModelData()) {
+            try {
+                return itemStack.getItemMeta().getCustomModelData() == Integer.parseInt(value);
+            } catch (Exception ignored) {
+            }
+        }
+        return itemStack.getType().name().equalsIgnoreCase(value);
+    }
+
     private void calculateAverageAndMedianPrice(String economyName, String materialName, String cacheKey) {
         List<Long> prices = this.manager.getPlayerPurchaseItems()
                 .filter(item -> item.getPurchaseTime() >= periodStart)
                 .filter(item -> item.getEconomy().equalsIgnoreCase(economyName))
                 .filter(item -> item.getAuctionType() == AuctionType.DEFAULT)
-                .filter(item -> item.getType().equalsIgnoreCase(materialName))
-                .map(PlayerItemPurchased::getPrice).sorted().collect(Collectors.toList());
+                .filter(item -> checkItems(item.getItemStackContent(), materialName))
+                .map(PlayerItemPurchased::getPrice).sorted().toList();
 
         CacheEntry entry = new CacheEntry();
 
@@ -90,6 +100,15 @@ public class ItemPriceStatistics extends ZUtils {
         return entry != null ? entry.itemCount : 0;
     }
 
+    private String getItemStackInformation(ItemStack itemStack) {
+
+        if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasCustomModelData()) {
+            return String.valueOf(itemStack.getItemMeta().getCustomModelData());
+        }
+
+        return itemStack.getType().name();
+    }
+
     public void sendInformations(ZAuctionPlugin plugin, Player player, String economyName) {
         runAsync(plugin, () -> {
 
@@ -100,13 +119,14 @@ public class ItemPriceStatistics extends ZUtils {
             }
 
             Optional<AuctionEconomy> optional = plugin.getEconomyManager().getEconomy(economyName);
-            if (!optional.isPresent()) {
+            if (optional.isEmpty()) {
                 message(player, Message.PRICE_ECONOMY, "%economy%", economyName);
                 return;
             }
             AuctionEconomy economy = optional.get();
 
-            String materialName = itemStack.getType().name();
+            String materialName = getItemStackInformation(itemStack);
+            System.out.println("I WILL CHECK : " + materialName);
             updateCacheIfNeeded(economyName, materialName);
             CacheEntry entry = cache.get(buildCacheKey(economyName, materialName));
 

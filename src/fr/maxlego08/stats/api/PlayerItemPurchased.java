@@ -1,6 +1,7 @@
 package fr.maxlego08.stats.api;
 
 import fr.maxlego08.stats.dto.PlayerItemPurchasedDTO;
+import fr.maxlego08.stats.zcore.logger.Logger;
 import fr.maxlego08.zauctionhouse.api.AuctionItem;
 import fr.maxlego08.zauctionhouse.api.enums.AuctionType;
 import fr.maxlego08.zauctionhouse.zcore.utils.nms.ItemStackUtils;
@@ -12,7 +13,7 @@ import java.util.UUID;
 public class PlayerItemPurchased {
     private final UUID playerId;
     private final String playerName;
-    private final String itemStack;
+    private final String itemstack;
     private final long price;
     private final String economy;
     private final UUID sellerId;
@@ -22,10 +23,10 @@ public class PlayerItemPurchased {
     private long id;
     private ItemStack itemStackContent = null;
 
-    public PlayerItemPurchased(UUID playerId, String playerName, String itemStack, long price, String economy, UUID sellerId, String sellerName, long purchaseTime, AuctionType auctionType) {
+    public PlayerItemPurchased(UUID playerId, String playerName, String itemstack, long price, String economy, UUID sellerId, String sellerName, long purchaseTime, AuctionType auctionType) {
         this.playerId = playerId;
         this.playerName = playerName;
-        this.itemStack = itemStack;
+        this.itemstack = itemstack;
         this.price = price;
         this.economy = economy;
         this.sellerId = sellerId;
@@ -37,7 +38,7 @@ public class PlayerItemPurchased {
     public PlayerItemPurchased(PlayerItemPurchasedDTO dto) {
         this.playerId = dto.player_id();
         this.playerName = dto.player_name();
-        this.itemStack = dto.itemStack();
+        this.itemstack = dto.itemstack();
         this.price = dto.price();
         this.economy = dto.economy();
         this.sellerId = dto.seller_id();
@@ -49,7 +50,7 @@ public class PlayerItemPurchased {
     public PlayerItemPurchased(AuctionItem auctionItem, Player player) {
         this.playerId = player.getUniqueId();
         this.playerName = player.getName();
-        this.itemStack = auctionItem.getType() == AuctionType.INVENTORY ? String.join(",", auctionItem.serializedItems()) : auctionItem.serializedItem();
+        this.itemstack = auctionItem.getType() == AuctionType.INVENTORY ? String.join(",", auctionItem.serializedItems()) : auctionItem.serializedItem();
         this.price = auctionItem.getPrice();
         this.economy = auctionItem.getEconomyName();
         this.purchaseTime = System.currentTimeMillis();
@@ -76,7 +77,7 @@ public class PlayerItemPurchased {
     }
 
     public String getItemStack() {
-        return itemStack;
+        return itemstack;
     }
 
     public long getPrice() {
@@ -103,12 +104,44 @@ public class PlayerItemPurchased {
         return auctionType;
     }
 
+    @Override
+    public String toString() {
+        return "PlayerItemPurchased{" +
+                "playerId=" + playerId +
+                ", playerName='" + playerName + '\'' +
+                ", itemStack='" + itemstack + '\'' +
+                ", price=" + price +
+                ", economy='" + economy + '\'' +
+                ", sellerId=" + sellerId +
+                ", sellerName='" + sellerName + '\'' +
+                ", purchaseTime=" + purchaseTime +
+                ", auctionType=" + auctionType +
+                ", id=" + id +
+                ", itemStackContent=" + itemStackContent +
+                '}';
+    }
+
+    public ItemStack getItemStackContent() {
+
+        if (this.itemstack == null){
+            Logger.info("ItemStack is null for: " + this, Logger.LogType.ERROR);
+            return null;
+        }
+
+        if (this.auctionType != AuctionType.DEFAULT) return null;
+
+        if (this.itemStackContent == null) {
+            this.itemStackContent = ItemStackUtils.deserializeItemStack(this.itemstack);
+        }
+        return this.itemStackContent;
+    }
+
     public String getType() {
         if (this.auctionType == null || this.auctionType != AuctionType.DEFAULT) return "";
 
         try {
             if (this.itemStackContent == null) {
-                this.itemStackContent = ItemStackUtils.deserializeItemStack(this.itemStack);
+                this.itemStackContent = ItemStackUtils.deserializeItemStack(this.itemstack);
             }
 
             return this.itemStackContent.getType().name();

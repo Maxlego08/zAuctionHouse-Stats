@@ -10,6 +10,8 @@ public class Config {
     public static String noName = "✘";
     public static String noAmount = "0";
     public static String loading = "Loading...";
+    public static boolean enableNonApplicable = true;
+    public static String nonApplicable = "N/A";
     public static long cacheDurationMaterial = 3600000; // 1 hour in millisecondes
 
     /**
@@ -44,9 +46,11 @@ public class Config {
         FileConfiguration configuration = plugin.getConfig();
         enableDebug = configuration.getBoolean("enableDebug", false);
         enableDebugTime = configuration.getBoolean("enableDebugTime", false);
+        enableNonApplicable = configuration.getBoolean("enableNonApplicable", true);
         noName = configuration.getString("noName", "X");
         noAmount = configuration.getString("noAmount", "0");
         loading = configuration.getString("loading", "0");
+        nonApplicable = configuration.getString("nonApplicable", "N/A");
 		cacheDurationMaterial = configuration.getLong("cacheDurationMaterial", 3600000);
     }
 

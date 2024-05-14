@@ -126,7 +126,6 @@ public class ItemPriceStatistics extends ZUtils {
             AuctionEconomy economy = optional.get();
 
             String materialName = getItemStackInformation(itemStack);
-            System.out.println("I WILL CHECK : " + materialName);
             updateCacheIfNeeded(economyName, materialName);
             CacheEntry entry = cache.get(buildCacheKey(economyName, materialName));
 

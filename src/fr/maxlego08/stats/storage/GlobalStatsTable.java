@@ -21,7 +21,7 @@ public class GlobalStatsTable extends TableUtils {
     public void upsert(GlobalKey key, GlobalValue value) {
         ZPlugin.service.execute(() -> {
             this.requestHelper.upsert("zah_stats_global", table -> {
-                table.string("key", key.name());
+                table.string("key", key.name()).primary();
                 table.object("value", value.getValue());
             });
         });

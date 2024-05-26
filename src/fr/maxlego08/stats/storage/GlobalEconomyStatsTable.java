@@ -28,12 +28,10 @@ public class GlobalEconomyStatsTable extends TableUtils {
     public void upsertGlobalStatistic(EconomyKey key, String economy, long value) {
         ZPlugin.service.execute(() -> {
             this.requestHelper.upsert("zah_stats_global_economies", table -> {
-                table.string("key", key.name());
-                table.string("economy", economy);
+                table.string("key", key.name()).primary();
+                table.string("economy", economy).primary();
                 table.bigInt("value", value);
             });
         });
     }
-
-
 }

@@ -7,6 +7,7 @@ import fr.maxlego08.menu.button.loader.NoneLoader;
 import fr.maxlego08.menu.exceptions.InventoryException;
 import fr.maxlego08.menu.zcore.utils.nms.NMSUtils;
 import fr.maxlego08.stats.StatsPlugin;
+import fr.maxlego08.stats.zcore.utils.nms.NmsVersion;
 import fr.maxlego08.stats.zmenu.buttons.ButtonItemStatistics;
 import fr.maxlego08.stats.zmenu.loader.StatisticLoader;
 
@@ -93,7 +94,7 @@ public class ZMenuManager {
         files.forEach(e -> {
             if (!new File(this.plugin.getDataFolder(), e).exists()) {
 
-                if (NMSUtils.isNewVersion()) {
+                if (NmsVersion.getCurrentVersion().isNewMaterial()) {
                     this.plugin.saveResource(e.replace("patterns/", "patterns/1_13/"), e, false);
                 } else {
                     this.plugin.saveResource(e, false);

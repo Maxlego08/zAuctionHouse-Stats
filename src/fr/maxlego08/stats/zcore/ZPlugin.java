@@ -6,6 +6,7 @@ import fr.maxlego08.stats.placeholder.LocalPlaceholder;
 import fr.maxlego08.stats.placeholder.Placeholder;
 import fr.maxlego08.stats.save.Config;
 import fr.maxlego08.stats.zcore.enums.EnumInventory;
+import fr.maxlego08.stats.zcore.utils.nms.NmsVersion;
 import fr.maxlego08.stats.zcore.utils.storage.NoReloadable;
 import fr.maxlego08.stats.StatsPlugin;
 import fr.maxlego08.stats.command.CommandManager;
@@ -81,7 +82,7 @@ public abstract class ZPlugin extends JavaPlugin {
         this.addListener(new AdapterListener((StatsPlugin) this));
         this.addListener(this.inventoryManager);
 
-        boolean isNew = NMSUtils.isNewVersion();
+        boolean isNew = NmsVersion.nmsVersion.isNewMaterial();
         for (String file : this.files) {
             if (isNew) {
                 if (!new File(getDataFolder() + "/inventories/" + file + ".yml").exists()) {

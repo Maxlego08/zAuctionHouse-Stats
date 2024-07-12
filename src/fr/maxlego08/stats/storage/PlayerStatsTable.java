@@ -19,7 +19,7 @@ public class PlayerStatsTable extends TableUtils {
 
     public void updatePlayerStats(PlayerStats playerStats) {
         ZPlugin.service.execute(() -> this.requestHelper.upsert("zah_player_stats", table -> {
-            table.uuid("uuid", playerStats.getUuid());
+            table.uuid("uuid", playerStats.getUuid()).primary();
             table.string("name", playerStats.getName());
             table.bigInt("total_items_sold", playerStats.getTotalItemsSold());
             table.bigInt("total_items_bought", playerStats.getTotalItemsBought());

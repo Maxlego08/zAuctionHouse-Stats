@@ -6,7 +6,7 @@ import fr.maxlego08.menu.api.loader.ButtonLoader;
 import fr.maxlego08.stats.StatsPlugin;
 import fr.maxlego08.stats.zmenu.buttons.ButtonItemStatistics;
 import fr.maxlego08.zauctionhouse.api.AuctionManager;
-import fr.maxlego08.zauctionhouse.api.utils.Config;
+import fr.maxlego08.zauctionhouse.api.utils.AuctionConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -38,7 +38,7 @@ public class StatisticLoader implements ButtonLoader {
 
     @Override
     public Button load(YamlConfiguration yamlConfiguration, String s, DefaultButtonValue defaultButtonValue) {
-        String economyName = yamlConfiguration.getString(s + "economy", Config.defaultEconomy);
+        String economyName = yamlConfiguration.getString(s + "economy", AuctionConfiguration.defaultEconomy);
         return new ButtonItemStatistics(this.auctionManager, this.plugin, economyName);
     }
 }

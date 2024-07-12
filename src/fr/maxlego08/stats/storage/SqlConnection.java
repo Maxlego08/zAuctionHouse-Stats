@@ -17,13 +17,13 @@ public class SqlConnection {
     public SqlConnection(StatsPlugin plugin) {
         FileConfiguration configuration = plugin.getConfig();
         boolean debug = configuration.getBoolean("sql.debug", false);
-        DatabaseType databaseType = DatabaseType.valueOf(configuration.getString("sql.type", DatabaseType.MYSQL.name()).toString());
+        DatabaseType databaseType = DatabaseType.valueOf(configuration.getString("sql.type", DatabaseType.SQLITE.name()));
         String host = configuration.getString("sql.host");
         int port = configuration.getInt("sql.port");
         String database = configuration.getString("sql.database");
         String user = configuration.getString("sql.user");
         String password = configuration.getString("sql.password");
-        DatabaseConfiguration databaseConfiguration = DatabaseConfiguration.create(user, password, port, host, database, debug);
+        DatabaseConfiguration databaseConfiguration = DatabaseConfiguration.create(user, password, port, host, database, debug, databaseType);
         this.databaseConnection = databaseType == DatabaseType.MYSQL ? new MySqlConnection(databaseConfiguration) : new SqliteConnection(databaseConfiguration, plugin.getDataFolder());
     }
 

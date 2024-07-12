@@ -5,7 +5,7 @@ import fr.maxlego08.zauctionhouse.ZAuctionPlugin;
 import fr.maxlego08.zauctionhouse.api.economy.AuctionEconomy;
 import fr.maxlego08.zauctionhouse.api.enums.Message;
 import fr.maxlego08.zauctionhouse.api.enums.Permission;
-import fr.maxlego08.zauctionhouse.api.utils.Config;
+import fr.maxlego08.zauctionhouse.api.utils.AuctionConfiguration;
 import fr.maxlego08.zauctionhouse.command.VCommand;
 import fr.maxlego08.zauctionhouse.zcore.utils.commands.CommandType;
 
@@ -28,7 +28,7 @@ public class CommandAuctionPrice extends VCommand {
     @Override
     protected CommandType perform(ZAuctionPlugin zAuctionPlugin) {
 
-        String economyName = this.argAsString(0, Config.defaultEconomy);
+        String economyName = this.argAsString(0, AuctionConfiguration.defaultEconomy);
         this.plugin.getManager().getItemPriceStatistics().sendInformations(zAuctionPlugin, player, economyName);
 
         return CommandType.SUCCESS;

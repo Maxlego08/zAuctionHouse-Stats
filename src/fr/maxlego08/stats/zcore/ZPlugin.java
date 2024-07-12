@@ -2,12 +2,6 @@ package fr.maxlego08.stats.zcore;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import fr.maxlego08.stats.placeholder.LocalPlaceholder;
-import fr.maxlego08.stats.placeholder.Placeholder;
-import fr.maxlego08.stats.save.Config;
-import fr.maxlego08.stats.zcore.enums.EnumInventory;
-import fr.maxlego08.stats.zcore.utils.nms.NmsVersion;
-import fr.maxlego08.stats.zcore.utils.storage.NoReloadable;
 import fr.maxlego08.stats.StatsPlugin;
 import fr.maxlego08.stats.command.CommandManager;
 import fr.maxlego08.stats.command.VCommand;
@@ -16,14 +10,18 @@ import fr.maxlego08.stats.inventory.VInventory;
 import fr.maxlego08.stats.inventory.ZInventoryManager;
 import fr.maxlego08.stats.listener.AdapterListener;
 import fr.maxlego08.stats.listener.ListenerAdapter;
+import fr.maxlego08.stats.placeholder.LocalPlaceholder;
+import fr.maxlego08.stats.placeholder.Placeholder;
+import fr.maxlego08.stats.zcore.enums.EnumInventory;
 import fr.maxlego08.stats.zcore.logger.Logger;
 import fr.maxlego08.stats.zcore.logger.Logger.LogType;
 import fr.maxlego08.stats.zcore.utils.gson.LocationAdapter;
 import fr.maxlego08.stats.zcore.utils.gson.PotionEffectAdapter;
+import fr.maxlego08.stats.zcore.utils.nms.NmsVersion;
 import fr.maxlego08.stats.zcore.utils.plugins.Plugins;
+import fr.maxlego08.stats.zcore.utils.storage.NoReloadable;
 import fr.maxlego08.stats.zcore.utils.storage.Persist;
 import fr.maxlego08.stats.zcore.utils.storage.Savable;
-import fr.maxlego08.zauctionhouse.zcore.utils.nms.NMSUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.Listener;
@@ -48,17 +46,15 @@ import java.util.logging.Level;
 public abstract class ZPlugin extends JavaPlugin {
 
     public static final ExecutorService service = Executors.newFixedThreadPool(5);
+    protected final List<String> files = new ArrayList<>();
     private final Logger log = new Logger(this.getDescription().getFullName());
     private final List<Savable> savers = new ArrayList<>();
     private final List<ListenerAdapter> listenerAdapters = new ArrayList<>();
-
+    protected CommandManager commandManager;
+    protected ZInventoryManager inventoryManager;
     private Gson gson;
     private Persist persist;
     private long enableTime;
-
-    protected CommandManager commandManager;
-    protected ZInventoryManager inventoryManager;
-    protected final List<String> files = new ArrayList<>();
 
     protected void preEnable() {
 
@@ -205,10 +201,10 @@ public abstract class ZPlugin extends JavaPlugin {
     public <T> T getProvider(Class<T> classz) {
         RegisteredServiceProvider<T> provider = getServer().getServicesManager().getRegistration(classz);
         if (provider == null) {
-            log.log("Unable to retrieve the provider " + classz.toString(), LogType.WARNING);
+            log.log("Unable to retrieve the provider " + classz, LogType.WARNING);
             return null;
         }
-        return provider.getProvider() != null ? (T) provider.getProvider() : null;
+        return provider.getProvider() != null ? provider.getProvider() : null;
     }
 
     /**
@@ -232,34 +228,15 @@ public abstract class ZPlugin extends JavaPlugin {
         return inventoryManager;
     }
 
-    /**
-     * Check if plugin is enable
-     *
-     * @param pluginName
-     * @return
-     */
     protected boolean isEnable(Plugins pl) {
         Plugin plugin = getPlugin(pl);
-        return plugin == null ? false : plugin.isEnabled();
+        return plugin != null && plugin.isEnabled();
     }
 
-    /**
-     * Get plugin for plugins enum
-     *
-     * @param pluginName
-     * @return
-     */
     protected Plugin getPlugin(Plugins plugin) {
         return Bukkit.getPluginManager().getPlugin(plugin.getName());
     }
 
-    /**
-     * Register command
-     *
-     * @param command
-     * @param vCommand
-     * @param aliases
-     */
     protected void registerCommand(String command, VCommand vCommand, String... aliases) {
         this.commandManager.registerCommand(this, command, vCommand, Arrays.asList(aliases));
     }

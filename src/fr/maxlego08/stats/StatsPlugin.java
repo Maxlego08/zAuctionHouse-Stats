@@ -21,6 +21,7 @@ import fr.maxlego08.stats.zcore.ZPlugin;
 import fr.maxlego08.stats.zmenu.ZMenuManager;
 import fr.maxlego08.zauctionhouse.ZAuctionPlugin;
 import fr.maxlego08.zauctionhouse.api.AuctionManager;
+import fr.maxlego08.zauctionhouse.api.utils.AuctionConfiguration;
 import fr.maxlego08.zauctionhouse.command.commands.CommandAuction;
 import org.bukkit.Bukkit;
 
@@ -107,7 +108,7 @@ public class StatsPlugin extends ZPlugin {
         CommandAuction commandAuction = auctionPlugin.getCommandAuction();
         commandAuction.addSubCommand(new CommandAuctionPrice(auctionPlugin, this));
 
-        if (fr.maxlego08.zauctionhouse.api.utils.Config.USE_ZMENU_INVENTORY) {
+        if (AuctionConfiguration.USE_ZMENU_INVENTORY) {
             this.menuManager = new ZMenuManager(this);
             this.menuManager.loadButtons();
             this.menuManager.loadInventories();

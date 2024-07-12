@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.maxlego08.stats</groupId>
     <artifactId>zAuctionHouseStats</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
@@ -138,9 +138,9 @@
         <dependency>
             <groupId>com.github.Maxlego08</groupId>
             <artifactId>zAuctionHouseV3-API</artifactId>
-            <version>3.2.1.2</version>
+            <version>3.2.2.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.1.4.jar</systemPath>
+            <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.2.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.Maxlego08</groupId>
@@ -151,7 +151,7 @@
         <dependency>
             <groupId>com.github.Maxlego08</groupId>
             <artifactId>Sarah</artifactId>
-            <version>29acf27f7f</version>
+            <version>1.6</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

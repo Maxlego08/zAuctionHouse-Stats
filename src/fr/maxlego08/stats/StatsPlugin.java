@@ -1,6 +1,7 @@
 package fr.maxlego08.stats;
 
 import fr.maxlego08.sarah.MigrationManager;
+import fr.maxlego08.sarah.logger.JULogger;
 import fr.maxlego08.stats.command.commands.CommandAuctionPrice;
 import fr.maxlego08.stats.command.commands.CommandStats;
 import fr.maxlego08.stats.migrations.GlobalEconomyStatsMigration;
@@ -86,7 +87,7 @@ public class StatsPlugin extends ZPlugin {
             MigrationManager.registerMigration(new PlayerItemSaleMigration());
             MigrationManager.registerMigration(new PlayerItemPurchasedMigration());
             MigrationManager.registerMigration(new PlayerStatsMigration());
-            MigrationManager.execute(this.connection.getConnection(), this.connection.getDatabaseConnection().getDatabaseConfiguration(), this.getLogger());
+            MigrationManager.execute(this.connection.getDatabaseConnection(), JULogger.from(this.getLogger()));
 
             try {
                 this.manager.setGlobalValues(this.globalStatsTable.selectAll());

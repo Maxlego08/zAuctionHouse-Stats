@@ -3,13 +3,10 @@ package fr.maxlego08.stats.zmenu;
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
 import fr.maxlego08.menu.api.pattern.PatternManager;
-import fr.maxlego08.menu.button.loader.NoneLoader;
 import fr.maxlego08.menu.exceptions.InventoryException;
-import fr.maxlego08.menu.zcore.utils.nms.NMSUtils;
 import fr.maxlego08.stats.StatsPlugin;
-import fr.maxlego08.stats.zcore.utils.nms.NmsVersion;
-import fr.maxlego08.stats.zmenu.buttons.ButtonItemStatistics;
 import fr.maxlego08.stats.zmenu.loader.StatisticLoader;
+import fr.maxlego08.zauctionhouse.zcore.utils.nms.NmsVersion;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,8 +61,7 @@ public class ZMenuManager {
 
     private void files(File folder, Consumer<File> consumer) {
         try (Stream<Path> s = Files.walk(Paths.get(folder.getPath()))) {
-            s.skip(1).map(Path::toFile).filter(File::isFile).filter(e -> e.getName().endsWith(".yml"))
-                    .forEach(consumer);
+            s.skip(1).map(Path::toFile).filter(File::isFile).filter(e -> e.getName().endsWith(".yml")).forEach(consumer);
         } catch (IOException exception) {
             exception.printStackTrace();
         }

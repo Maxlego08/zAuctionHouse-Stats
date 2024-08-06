@@ -2,6 +2,7 @@ package fr.maxlego08.stats.api;
 
 import fr.maxlego08.sarah.DatabaseConnection;
 import fr.maxlego08.sarah.RequestHelper;
+import fr.maxlego08.sarah.logger.JULogger;
 
 import java.util.logging.Logger;
 
@@ -14,6 +15,6 @@ public abstract class TableUtils {
     public TableUtils(DatabaseConnection connection, Logger logger) {
         this.logger = logger;
         this.connection = connection;
-        this.requestHelper = new RequestHelper(connection, logger);
+        this.requestHelper = new RequestHelper(connection, JULogger.from(logger));
     }
 }

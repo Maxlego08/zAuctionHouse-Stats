@@ -245,13 +245,6 @@ public class ItemBuilder extends ZUtils implements Cloneable {
 
 	@SuppressWarnings("deprecation")
 	public ItemBuilder owner(String name) {
-		if ((material == getMaterial(144)) || (material == getMaterial(397))) {
-			SkullMeta smeta = (SkullMeta) meta;
-			smeta.setOwner(name);
-			if (meta == null)
-				build();
-			meta = smeta;
-		}
 		return this;
 	}
 

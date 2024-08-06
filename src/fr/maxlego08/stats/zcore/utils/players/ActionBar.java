@@ -1,6 +1,6 @@
 package fr.maxlego08.stats.zcore.utils.players;
 
-import fr.maxlego08.stats.zcore.utils.nms.NmsVersion;
+import fr.maxlego08.zauctionhouse.zcore.utils.nms.NmsVersion;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;

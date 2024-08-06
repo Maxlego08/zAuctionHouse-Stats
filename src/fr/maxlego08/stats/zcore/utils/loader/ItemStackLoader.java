@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import fr.maxlego08.stats.exceptions.ItemEnchantException;
 import fr.maxlego08.stats.exceptions.ItemFlagException;
-import fr.maxlego08.stats.zcore.utils.nms.NmsVersion;
+import fr.maxlego08.zauctionhouse.zcore.utils.nms.NmsVersion;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -36,15 +36,11 @@ public class ItemStackLoader extends ZUtils implements Loader<ItemStack> {
 		Material material = null;
 
 		int value = configuration.getInt(path + "material", 0);
-		if (value != 0)
-			material = getMaterial(value);
 
-		if (material == null) {
-			String str = configuration.getString(path + "material", null);
-			if (str == null)
-				return null;
-			material = Material.getMaterial(str.toUpperCase());
-		}
+		String str = configuration.getString(path + "material", null);
+		if (str == null)
+			return null;
+		material = Material.getMaterial(str.toUpperCase());
 
 		if (modelID < 0)
 			modelID = 0;

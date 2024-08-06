@@ -5,13 +5,11 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import fr.maxlego08.stats.StatsPlugin;
 import fr.maxlego08.stats.zcore.enums.EnumInventory;
-import fr.maxlego08.stats.zcore.enums.Message;
 import fr.maxlego08.stats.zcore.enums.Permission;
 import fr.maxlego08.stats.zcore.utils.builder.CooldownBuilder;
 import fr.maxlego08.stats.zcore.utils.builder.TimerBuilder;
-import fr.maxlego08.stats.zcore.utils.nms.ItemStackUtils;
-import fr.maxlego08.stats.zcore.utils.nms.NmsVersion;
 import fr.maxlego08.stats.zcore.utils.players.ActionBar;
+import fr.maxlego08.zauctionhouse.zcore.utils.nms.NmsVersion;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -44,7 +42,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -53,13 +50,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -67,44 +59,6 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("deprecation")
 public abstract class ZUtils extends MessageUtils {
-
-    private static transient List<String> teleportPlayers = new ArrayList<String>();
-    // For plugin support from 1.8 to 1.12
-    private static transient Material[] byId;
-
-    static {
-        if (!NmsVersion.nmsVersion.isNewMaterial()) {
-            byId = new Material[0];
-            for (Material material : Material.values()) {
-                if (byId.length > material.getId()) {
-                    byId[material.getId()] = material;
-                } else {
-                    byId = Arrays.copyOfRange(byId, 0, material.getId() + 2);
-                    byId[material.getId()] = material;
-                }
-            }
-        }
-    }
-
-    /**
-     * Allows to encode an itemstack in base64
-     *
-     * @param item - ItemStack
-     * @return the encoded item
-     */
-    protected String encode(ItemStack item) {
-        return ItemStackUtils.serializeItemStack(item);
-    }
-
-    /**
-     * Allows to decode a string in ItemStack
-     *
-     * @param item - the encoded itemstack
-     * @return the decoded item
-     */
-    protected ItemStack decode(String item) {
-        return ItemStackUtils.deserializeItemStack(item);
-    }
 
     /**
      * Allows to obtain a random number between a and b
@@ -146,17 +100,6 @@ public abstract class ZUtils extends MessageUtils {
             player.getWorld().dropItem(player.getLocation(), item);
         else
             player.getInventory().addItem(item);
-    }
-
-    /**
-     * Allows to return a material according to its ID Works only for plugins
-     * from 1.8 to 1.12
-     *
-     * @param id
-     * @return the material according to his id
-     */
-    protected Material getMaterial(int id) {
-        return byId.length > id && id >= 0 ? byId[id] : Material.AIR;
     }
 
     /**
@@ -224,63 +167,6 @@ public abstract class ZUtils extends MessageUtils {
     protected boolean same(Location l, Location l2) {
         return (l.getBlockX() == l2.getBlockX()) && (l.getBlockY() == l2.getBlockY())
                 && (l.getBlockZ() == l2.getBlockZ()) && l.getWorld().getName().equals(l2.getWorld().getName());
-    }
-
-    /**
-     * Teleport a player to a given location with a given delay
-     *
-     * @param player   who will be teleported
-     * @param delay    before the teleportation of the player
-     * @param location where the player will be teleported
-     */
-    protected void teleport(Player player, int delay, Location location) {
-        teleport(player, delay, location, null);
-    }
-
-    /**
-     * Teleport a player to a given location with a given delay
-     *
-     * @param player   who will be teleported
-     * @param delay    before the teleportation of the player
-     * @param location where the player will be teleported
-     * @param code     executed when the player is teleported or not
-     */
-    protected void teleport(Player player, int delay, Location location, Consumer<Boolean> cmd) {
-        if (teleportPlayers.contains(player.getName())) {
-            message(player, Message.TELEPORT_ERROR);
-            return;
-        }
-        ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
-        Location playerLocation = player.getLocation();
-        AtomicInteger verif = new AtomicInteger(delay);
-        teleportPlayers.add(player.getName());
-        if (!location.getChunk().isLoaded())
-            location.getChunk().load();
-        ses.scheduleWithFixedDelay(() -> {
-            if (!same(playerLocation, player.getLocation())) {
-                message(player, Message.TELEPORT_MOVE);
-                ses.shutdown();
-                teleportPlayers.remove(player.getName());
-                if (cmd != null)
-                    cmd.accept(false);
-                return;
-            }
-            int currentSecond = verif.getAndDecrement();
-            if (!player.isOnline()) {
-                ses.shutdown();
-                teleportPlayers.remove(player.getName());
-                return;
-            }
-            if (currentSecond == 0) {
-                ses.shutdown();
-                teleportPlayers.remove(player.getName());
-                player.teleport(location);
-                message(player, Message.TELEPORT_SUCCESS);
-                if (cmd != null)
-                    cmd.accept(true);
-            } else
-                message(player, Message.TELEPORT_MESSAGE, currentSecond);
-        }, 0, 1, TimeUnit.SECONDS);
     }
 
     /**
@@ -397,7 +283,7 @@ public abstract class ZUtils extends MessageUtils {
      * @return
      */
     protected double percent(double value, double total) {
-        return (double) ((value * 100) / total);
+        return (value * 100) / total;
     }
 
     /**
@@ -406,7 +292,7 @@ public abstract class ZUtils extends MessageUtils {
      * @return
      */
     protected double percentNum(double total, double percent) {
-        return (double) (total * (percent / 100));
+        return total * (percent / 100);
     }
 
     /**
@@ -556,7 +442,7 @@ public abstract class ZUtils extends MessageUtils {
             Matcher matcher = pattern.matcher(message);
             while (matcher.find()) {
                 String color = message.substring(matcher.start(), matcher.end());
-                message = message.replace(color, net.md_5.bungee.api.ChatColor.of(color) + "");
+                message = message.replace(color, String.valueOf(net.md_5.bungee.api.ChatColor.of(color)));
                 matcher = pattern.matcher(message);
             }
         }
@@ -692,11 +578,11 @@ public abstract class ZUtils extends MessageUtils {
         if (value < 10000)
             return format(value, "#.#");
         else if (value < 1000000)
-            return String.valueOf(Integer.valueOf((int) (value / 1000))) + "k ";
+            return Integer.valueOf((int) (value / 1000)) + "k ";
         else if (value < 1000000000)
-            return String.valueOf(format((value / 1000) / 1000, "#.#")) + "m ";
-        else if (value < 1000000000000l)
-            return String.valueOf(Integer.valueOf((int) (((value / 1000) / 1000) / 1000))) + "M ";
+            return format((value / 1000) / 1000, "#.#") + "m ";
+        else if (value < 1000000000000L)
+            return Integer.valueOf((int) (((value / 1000) / 1000) / 1000)) + "M ";
         else
             return "to much";
     }
@@ -709,11 +595,11 @@ public abstract class ZUtils extends MessageUtils {
         if (value < 10000)
             return format(value, "#.#");
         else if (value < 1000000)
-            return String.valueOf(Integer.valueOf((int) (value / 1000))) + "k ";
+            return Integer.valueOf((int) (value / 1000)) + "k ";
         else if (value < 1000000000)
-            return String.valueOf(format((value / 1000) / 1000, "#.#")) + "m ";
-        else if (value < 1000000000000l)
-            return String.valueOf(Integer.valueOf((int) (((value / 1000) / 1000) / 1000))) + "M ";
+            return format((value / 1000) / 1000, "#.#") + "m ";
+        else if (value < 1000000000000L)
+            return Integer.valueOf((int) (((value / 1000) / 1000) / 1000)) + "M ";
         else
             return "to much";
     }
@@ -922,29 +808,15 @@ public abstract class ZUtils extends MessageUtils {
     public ItemStack playerHead(ItemStack itemStack, OfflinePlayer player) {
         String name = itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()
                 ? itemStack.getItemMeta().getDisplayName() : null;
-        if (NmsVersion.nmsVersion.isNewMaterial()) {
-            if (itemStack.getType().equals(Material.PLAYER_HEAD) && name != null && name.startsWith("HEAD")) {
-                SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
-                name = name.replace("HEAD", "");
-                if (name.length() == 0)
-                    meta.setDisplayName(null);
-                else
-                    meta.setDisplayName(name);
-                meta.setOwningPlayer(player);
-                itemStack.setItemMeta(meta);
-            }
-        } else {
-            if (itemStack.getType().equals(getMaterial(397)) && itemStack.getData().getData() == 3 && name != null
-                    && name.startsWith("HEAD")) {
-                SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
-                name = name.replace("HEAD", "");
-                if (name.length() == 0)
-                    meta.setDisplayName(null);
-                else
-                    meta.setDisplayName(name);
-                meta.setOwner(player.getName());
-                itemStack.setItemMeta(meta);
-            }
+        if (itemStack.getType().equals(Material.PLAYER_HEAD) && name != null && name.startsWith("HEAD")) {
+            SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
+            name = name.replace("HEAD", "");
+            if (name.length() == 0)
+                meta.setDisplayName(null);
+            else
+                meta.setDisplayName(name);
+            meta.setOwningPlayer(player);
+            itemStack.setItemMeta(meta);
         }
         return itemStack;
     }
@@ -955,8 +827,7 @@ public abstract class ZUtils extends MessageUtils {
      * @return itemstack
      */
     protected ItemStack playerHead() {
-        return NmsVersion.nmsVersion.isNewMaterial() ? new ItemStack(Material.PLAYER_HEAD)
-                : new ItemStack(getMaterial(397), 1, (byte) 3);
+        return new ItemStack(Material.PLAYER_HEAD);
     }
 
     /**
@@ -970,7 +841,7 @@ public abstract class ZUtils extends MessageUtils {
         RegisteredServiceProvider<T> provider = plugin.getServer().getServicesManager().getRegistration(classz);
         if (provider == null)
             return null;
-        return provider.getProvider() != null ? (T) provider.getProvider() : null;
+        return provider.getProvider() != null ? provider.getProvider() : null;
     }
 
     /**
@@ -1032,19 +903,6 @@ public abstract class ZUtils extends MessageUtils {
         }
         head.setItemMeta(headMeta);
         return head;
-    }
-
-    /**
-     * Allows to check if an itemstack and a head
-     *
-     * @param itemStack
-     * @return boolean
-     */
-    protected boolean isPlayerHead(ItemStack itemStack) {
-        Material material = itemStack.getType();
-        if (NmsVersion.nmsVersion.isNewMaterial())
-            return material.equals(Material.PLAYER_HEAD);
-        return (material.equals(getMaterial(397))) && (itemStack.getDurability() == 3);
     }
 
     /**

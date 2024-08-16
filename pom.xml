@@ -138,9 +138,9 @@
         <dependency>
             <groupId>com.github.Maxlego08</groupId>
             <artifactId>zAuctionHouseV3-API</artifactId>
-            <version>3.2.2.0</version>
+            <version>3.2.2.3</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.2.0.jar</systemPath>
+            <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.2.3.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.Maxlego08</groupId>
@@ -151,7 +151,7 @@
         <dependency>
             <groupId>com.github.Maxlego08</groupId>
             <artifactId>Sarah</artifactId>
-            <version>1.9</version>
+            <version>fa6a54effa</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

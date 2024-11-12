@@ -131,7 +131,7 @@ public class PlayerItemPurchased {
         if (this.auctionType != AuctionType.DEFAULT) return null;
 
         if (this.itemStackContent == null) {
-            this.itemStackContent = ItemStackUtils.deserializeItemStack(this.itemstack);
+            this.itemStackContent = ItemStackUtils.safeDeserializeItemStack(this.itemstack);
         }
         return this.itemStackContent;
     }
@@ -141,7 +141,7 @@ public class PlayerItemPurchased {
 
         try {
             if (this.itemStackContent == null) {
-                this.itemStackContent = ItemStackUtils.deserializeItemStack(this.itemstack);
+                this.itemStackContent = ItemStackUtils.safeDeserializeItemStack(this.itemstack);
             }
 
             return this.itemStackContent.getType().name();

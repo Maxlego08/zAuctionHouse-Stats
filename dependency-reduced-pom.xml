@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fr.maxlego08.stats</groupId>
   <artifactId>zAuctionHouseStats</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.7</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -132,9 +132,9 @@
     <dependency>
       <groupId>com.github.Maxlego08</groupId>
       <artifactId>zAuctionHouseV3-API</artifactId>
-      <version>3.2.2.3</version>
+      <version>3.2.2.7</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.2.3.jar</systemPath>
+      <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.2.7.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>

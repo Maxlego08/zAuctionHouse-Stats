@@ -103,7 +103,7 @@ public class PlayerItemForSale {
 
         try {
             if (this.itemStackContent == null) {
-                this.itemStackContent = ItemStackUtils.deserializeItemStack(this.itemStack);
+                this.itemStackContent = ItemStackUtils.safeDeserializeItemStack(this.itemStack);
             }
 
             return this.itemStackContent.getType().name();

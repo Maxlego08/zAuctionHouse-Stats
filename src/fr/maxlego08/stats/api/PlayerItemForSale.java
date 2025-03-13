@@ -3,7 +3,7 @@ package fr.maxlego08.stats.api;
 import fr.maxlego08.stats.dto.PlayerItemForSaleDTO;
 import fr.maxlego08.zauctionhouse.api.AuctionItem;
 import fr.maxlego08.zauctionhouse.api.enums.AuctionType;
-import fr.maxlego08.zauctionhouse.zcore.utils.nms.ItemStackUtils;
+import fr.maxlego08.zauctionhouse.zcore.utils.ItemStackUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

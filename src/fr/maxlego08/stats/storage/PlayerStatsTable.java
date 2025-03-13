@@ -3,6 +3,7 @@ package fr.maxlego08.stats.storage;
 import fr.maxlego08.sarah.DatabaseConnection;
 import fr.maxlego08.stats.api.PlayerStats;
 import fr.maxlego08.stats.api.TableUtils;
+import fr.maxlego08.stats.api.Tables;
 import fr.maxlego08.stats.dto.PlayerStatsDTO;
 import fr.maxlego08.stats.zcore.ZPlugin;
 
@@ -18,7 +19,7 @@ public class PlayerStatsTable extends TableUtils {
     }
 
     public void updatePlayerStats(PlayerStats playerStats) {
-        ZPlugin.service.execute(() -> this.requestHelper.upsert("zah_player_stats", table -> {
+        ZPlugin.service.execute(() -> this.requestHelper.upsert(Tables.STATS, table -> {
             table.uuid("uuid", playerStats.getUuid()).primary();
             table.string("name", playerStats.getName());
             table.bigInt("total_items_sold", playerStats.getTotalItemsSold());
@@ -32,7 +33,7 @@ public class PlayerStatsTable extends TableUtils {
 
 
     public Map<UUID, PlayerStats> selectAll() {
-        return this.requestHelper.selectAll("zah_player_stats", PlayerStatsDTO.class).stream().collect(Collectors.toMap(PlayerStatsDTO::uuid, PlayerStats::new));
+        return this.requestHelper.selectAll(Tables.STATS, PlayerStatsDTO.class).stream().collect(Collectors.toMap(PlayerStatsDTO::uuid, PlayerStats::new));
     }
 
 }

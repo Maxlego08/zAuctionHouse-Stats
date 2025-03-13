@@ -3,6 +3,7 @@ package fr.maxlego08.stats.storage;
 import fr.maxlego08.sarah.DatabaseConnection;
 import fr.maxlego08.stats.api.PlayerItemPurchased;
 import fr.maxlego08.stats.api.TableUtils;
+import fr.maxlego08.stats.api.Tables;
 import fr.maxlego08.stats.dto.PlayerItemPurchasedDTO;
 import fr.maxlego08.stats.zcore.ZPlugin;
 
@@ -21,7 +22,7 @@ public class PlayerItemPurchasedTable extends TableUtils {
 
     public void insertItemPurchased(PlayerItemPurchased item) {
         ZPlugin.service.execute(() -> {
-            this.requestHelper.insert("zah_player_purchased_items", table -> {
+            this.requestHelper.insert(Tables.PURCHASE_ITEMS, table -> {
                 table.uuid("player_id", item.getPlayerId());
                 table.string("player_name", item.getPlayerName());
                 table.string("itemstack", item.getItemStack());
@@ -37,6 +38,6 @@ public class PlayerItemPurchasedTable extends TableUtils {
 
 
     public Map<UUID, List<PlayerItemPurchased>> selectAll() throws SQLException {
-        return this.requestHelper.selectAll("zah_player_purchased_items", PlayerItemPurchasedDTO.class).stream().map(PlayerItemPurchased::new).collect(Collectors.groupingBy(PlayerItemPurchased::getPlayerId));
+        return this.requestHelper.selectAll(Tables.PURCHASE_ITEMS, PlayerItemPurchasedDTO.class).stream().map(PlayerItemPurchased::new).collect(Collectors.groupingBy(PlayerItemPurchased::getPlayerId));
     }
 }

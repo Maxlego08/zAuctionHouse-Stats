@@ -1,12 +1,12 @@
 package fr.maxlego08.stats.migrations;
 
-import fr.maxlego08.sarah.SchemaBuilder;
 import fr.maxlego08.sarah.database.Migration;
+import fr.maxlego08.stats.api.Tables;
 
 public class PlayerStatsMigration extends Migration {
     @Override
     public void up() {
-        SchemaBuilder.create(this, "zah_player_stats", table -> {
+        create(Tables.STATS, table -> {
             table.uuid("uuid").primary();
             table.string("name", 255);
             table.bigInt("total_items_sold").defaultValue("0");

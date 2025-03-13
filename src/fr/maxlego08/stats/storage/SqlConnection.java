@@ -2,7 +2,7 @@ package fr.maxlego08.stats.storage;
 
 import fr.maxlego08.sarah.DatabaseConfiguration;
 import fr.maxlego08.sarah.DatabaseConnection;
-import fr.maxlego08.sarah.MySqlConnection;
+import fr.maxlego08.sarah.HikariDatabaseConnection;
 import fr.maxlego08.sarah.SqliteConnection;
 import fr.maxlego08.sarah.database.DatabaseType;
 import fr.maxlego08.stats.StatsPlugin;
@@ -24,7 +24,7 @@ public class SqlConnection {
         String user = configuration.getString("sql.user");
         String password = configuration.getString("sql.password");
         DatabaseConfiguration databaseConfiguration = DatabaseConfiguration.create(user, password, port, host, database, debug, databaseType);
-        this.databaseConnection = databaseType == DatabaseType.MYSQL ? new MySqlConnection(databaseConfiguration) : new SqliteConnection(databaseConfiguration, plugin.getDataFolder());
+        this.databaseConnection = databaseType == DatabaseType.MYSQL ? new HikariDatabaseConnection(databaseConfiguration) : new SqliteConnection(databaseConfiguration, plugin.getDataFolder());
     }
 
     public Connection getConnection() {

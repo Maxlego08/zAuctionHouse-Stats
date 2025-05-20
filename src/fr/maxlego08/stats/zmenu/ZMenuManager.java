@@ -2,8 +2,8 @@ package fr.maxlego08.stats.zmenu;
 
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
+import fr.maxlego08.menu.api.exceptions.InventoryException;
 import fr.maxlego08.menu.api.pattern.PatternManager;
-import fr.maxlego08.menu.exceptions.InventoryException;
 import fr.maxlego08.stats.StatsPlugin;
 import fr.maxlego08.stats.zmenu.loader.StatisticLoader;
 import fr.maxlego08.zauctionhouse.zcore.utils.nms.NmsVersion;

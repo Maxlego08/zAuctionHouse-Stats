@@ -1,9 +1,9 @@
 package fr.maxlego08.stats.zmenu.buttons;
 
-import fr.maxlego08.menu.MenuItemStack;
+import fr.maxlego08.menu.api.MenuItemStack;
+import fr.maxlego08.menu.api.button.Button;
+import fr.maxlego08.menu.api.engine.InventoryEngine;
 import fr.maxlego08.menu.api.utils.Placeholders;
-import fr.maxlego08.menu.button.ZButton;
-import fr.maxlego08.menu.inventory.inventories.InventoryDefault;
 import fr.maxlego08.stats.ItemPriceStatistics;
 import fr.maxlego08.stats.StatsPlugin;
 import fr.maxlego08.stats.save.Config;
@@ -13,7 +13,7 @@ import fr.maxlego08.zauctionhouse.api.AuctionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class ButtonItemStatistics extends ZButton {
+public class ButtonItemStatistics extends Button {
 
     private final AuctionManager auctionManager;
     private final StatsPlugin plugin;
@@ -31,7 +31,7 @@ public class ButtonItemStatistics extends ZButton {
     }
 
     @Override
-    public void onRender(Player player, InventoryDefault inventory) {
+    public void onRender(Player player, InventoryEngine inventory) {
 
         ItemPriceStatistics manager = this.plugin.getManager().getItemPriceStatistics();
 

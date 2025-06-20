@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fr.maxlego08.stats</groupId>
   <artifactId>zAuctionHouseStats</artifactId>
-  <version>1.0.8</version>
+  <version>1.0.9</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -97,6 +97,10 @@
       <id>papermc</id>
       <url>https://repo.papermc.io/repository/maven-public/</url>
     </repository>
+    <repository>
+      <id>groupez</id>
+      <url>https://repo.groupez.dev/releases</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -124,17 +128,17 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.Maxlego08</groupId>
-      <artifactId>zMenu-API</artifactId>
-      <version>1.0.2.7</version>
+      <groupId>fr.maxlego08.menu</groupId>
+      <artifactId>zmenu-api</artifactId>
+      <version>1.1.0.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.github.Maxlego08</groupId>
       <artifactId>zAuctionHouseV3-API</artifactId>
-      <version>3.2.3.1</version>
+      <version>3.2.3.4</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.3.2.jar</systemPath>
+      <systemPath>${project.basedir}/libs/zAuctionHouse-3.2.3.4.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>
